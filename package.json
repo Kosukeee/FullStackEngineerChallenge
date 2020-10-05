@@ -1,0 +1,32 @@
+{
+  "name": "fullstackengineerchallenge",
+  "version": "0.0.1",
+  "description": "Paypay corporation's technical interview",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kosukeee/FullStackEngineerChallenge.git"
+  },
+  "author": "Kosuke Muramatsu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kosukeee/FullStackEngineerChallenge/issues"
+  },
+  "homepage": "https://github.com/Kosukeee/FullStackEngineerChallenge#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.10.7",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "^3.4.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}

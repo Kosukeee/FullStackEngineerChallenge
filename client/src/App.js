@@ -8,8 +8,6 @@ import NavMenu from "./components/NavMenu";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
 
-import "./App.css";
-
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,

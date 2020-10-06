@@ -13,14 +13,14 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Signin = () => {
+const Login = () => {
   const classes = useStyles();
 
   return (
     <Grid item xs={12}>
-      <Paper className={classes.paper}>Sign In</Paper>
+      <Paper className={classes.paper}>Log In</Paper>
     </Grid>
   )
 };
 
-export default Signin;
+export default Login;

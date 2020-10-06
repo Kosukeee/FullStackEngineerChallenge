@@ -1,10 +1,13 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
+
 import Home from "./components/Home";
 import NavMenu from "./components/NavMenu";
-import Signin from "./components/Signin";
-import Grid from "@material-ui/core/Grid";
+import Signup from "./components/Signup";
+import Login from "./components/Login";
+
 import "./App.css";
 
 const useStyles = makeStyles((theme) => ({
@@ -23,7 +26,8 @@ function App() {
           <NavMenu />
           <Switch>
             <Route exact path="/" component={Home} />
-            <Route exact path="/signin" component={Signin} />
+            <Route path="/signup" component={Signup} />
+            <Route path="/login" component={Login} />
           </Switch>
         </Grid>
       </div>

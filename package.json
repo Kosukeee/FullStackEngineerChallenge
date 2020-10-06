@@ -2,10 +2,10 @@
   "name": "fullstackengineerchallenge",
   "version": "0.0.1",
   "description": "Paypay corporation's technical interview",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "node server.js",
+    "server": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -19,9 +19,14 @@
   "homepage": "https://github.com/Kosukeee/FullStackEngineerChallenge#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "concurrently": "^5.3.0",
     "express": "^4.17.1",
+    "is-empty": "^1.2.0",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.7",
-    "passport": "^0.4.1"
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
+    "validator": "^13.1.17"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"

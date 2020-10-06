@@ -1,5 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Provider } from "react-redux";
+import store from "./store";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 
@@ -18,18 +20,20 @@ function App() {
   const classes = useStyles();
 
   return (
-    <Router>
-      <div className={classes.root}>
-        <Grid container>
-          <NavMenu />
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route path="/signup" component={Signup} />
-            <Route path="/login" component={Login} />
-          </Switch>
-        </Grid>
-      </div>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <div className={classes.root}>
+          <Grid container>
+            <NavMenu />
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route path="/signup" component={Signup} />
+              <Route path="/login" component={Login} />
+            </Switch>
+          </Grid>
+        </div>
+      </Router>
+    </Provider>
   );
 }
 

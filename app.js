@@ -1,13 +1,15 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 const app = express();
 const MONGODB_URI =
   "mongodb+srv://KosukeMuramatsu:AlexMcq5249@cluster0.6nofq.mongodb.net/employees";
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(__dirname + "public"));
+
 mongoose
   .connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {

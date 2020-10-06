@@ -18,13 +18,10 @@
   },
   "homepage": "https://github.com/Kosukeee/FullStackEngineerChallenge#readme",
   "dependencies": {
-    "body-parser": "^1.19.0",
+    "bcryptjs": "^2.4.3",
     "express": "^4.17.1",
     "mongoose": "^5.10.7",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "^3.4.3"
+    "passport": "^0.4.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"

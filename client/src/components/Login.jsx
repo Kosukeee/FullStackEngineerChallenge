@@ -60,7 +60,7 @@ const Login = ({ loginUser, history, auth }) => {
     if (errors) {
       setErrors(errors);
     }
-  }, [auth.isAuthenticated, errors])
+  }, [auth.isAuthenticated, errors, history])
 
   useEffect(() => {
     if (auth.isAuthenticated) {

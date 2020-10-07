@@ -6,6 +6,7 @@ const validateSignupInput = require("../validation/signup");
 const validateLoginInput = require("../validation/login");
 
 const User = require("../models/user");
+const Employee = require("../models/employee");
 
 exports.getSignup = (req, res, next) => {
   let message = req.flash("error");
@@ -47,23 +48,6 @@ exports.postSignup = async (req, res, next) => {
       });
     });
   });
-
-  // try {
-  //   const hashedPw = await bcrypt.hash(password, 12);
-  //   const user = new User({
-  //     email,
-  //     name,
-  //     password: hashedPw,
-  //   });
-  //   const result = await user.save();
-
-  //   res.status(201).json({ message: "User created", userId: result._id });
-  // } catch (err) {
-  //   if (!err.statusCode) {
-  //     err.statusCode = 500;
-  //   }
-  //   next(err);
-  // }
 };
 
 exports.postLogin = async (req, res, next) => {
@@ -108,4 +92,35 @@ exports.postLogin = async (req, res, next) => {
       }
     });
   });
+};
+
+exports.postAddEmployee = (req, res, next) => {
+  const { name } = req.body;
+  const { evaluation } = req.body;
+
+  console.log(name);
+  console.log(evaluation);
+
+  const employee = new Employee({
+    name,
+    evaluation,
+  });
+
+  Employee.findById(employeeId).then((employee) => {
+    if (employee) {
+      return res.redirect("/");
+    }
+  });
+
+  employee
+    .save()
+    .then((result) => {
+      console.log("Employee added");
+      res.redirect("/");
+    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.statusCode = 500;
+      return next(error);
+    });
 };

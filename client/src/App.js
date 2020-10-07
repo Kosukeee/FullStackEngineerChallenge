@@ -24,15 +24,19 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 if (localStorage.jwtToken) {
-  const token = localStorage.jwt_decode;
-  setAuthToken(token);
-  const decoded = jwt_decode(token);
-  store.dispatch(setCurrentUser(decoded));
+  try {
+    const token = localStorage.jwt_decode;
+    setAuthToken(token);
+    const decoded = jwt_decode(token);
+    store.dispatch(setCurrentUser(decoded));
 
-  const currentTime = Date.now() / 1000;
-  if (decoded.exp < currentTime) {
-    store.dispatch(logoutUser());
-    window.location.href = "/logout";
+    const currentTime = Date.now() / 1000;
+    if (decoded.exp < currentTime) {
+      store.dispatch(logoutUser());
+      window.location.href = "/logout";
+    }
+  } catch (err) {
+    console.log(err);
   }
 }
 

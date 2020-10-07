@@ -1,7 +1,12 @@
 import axios from "axios";
 import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
-import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from "./types";
+import {
+  GET_ERRORS,
+  SET_CURRENT_USER,
+  USER_LOADING,
+  ADD_EMPLOYEE,
+} from "./types";
 
 export const signupUser = (userData, history) => (dispatch) => {
   axios
@@ -51,4 +56,27 @@ export const logoutUser = () => (dispatch) => {
   localStorage.removeItem("jwtToken");
   setAuthToken(false);
   dispatch(setCurrentUser({}));
+};
+
+export const setEmployee = (employeeData) => {
+  return {
+    type: ADD_EMPLOYEE,
+    payload: employeeData,
+  };
+};
+
+export const addEmployee = (employeeData) => (dispatch) => {
+  console.log(employeeData);
+  axios
+    .post("http://localhost:8080/add-employee", employeeData)
+    .then((res) => {
+      console.log(res);
+      dispatch(setEmployee(employeeData));
+    })
+    .catch((err) => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data,
+      });
+    });
 };

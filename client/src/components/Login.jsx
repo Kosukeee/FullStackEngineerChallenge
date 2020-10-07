@@ -1,4 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { connect }  from 'react-redux';
+import { loginUser } from "../actions/authActions";
+// import classnames from 'classnames';
+import { func, object } from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
@@ -20,10 +24,10 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Login = () => {
+const Login = ({ loginUser, history, auth }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errors] = useState({});
+  const [errors, setErrors] = useState({});
   const classes = useStyles();
 
   const onChange = e => {
@@ -46,8 +50,23 @@ const Login = () => {
       email,
       password,
     };
-    console.log(userData);
+    loginUser(userData);
   }
+
+  useEffect(() => {
+    if (auth.isAuthenticated) {
+      history.push('/');
+    }
+    if (errors) {
+      setErrors(errors);
+    }
+  }, [auth.isAuthenticated, errors])
+
+  useEffect(() => {
+    if (auth.isAuthenticated) {
+      history.push('/');
+    }
+  });
 
   return (
     <Grid item xs={12}>
@@ -63,4 +82,15 @@ const Login = () => {
   )
 };
 
-export default Login;
+Login.propTypes = {
+  loginUser: func.isRequired,
+  auth: object.isRquired,
+  errors: object.isRequired
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth,
+  errors: state.errors
+});
+
+export default connect(mapStateToProps, { loginUser })(Login);

@@ -19,8 +19,6 @@ exports.postSignup = async (req, res, next) => {
   const name = req.body.name;
   const password = req.body.password;
 
-  console.log(email, password, name);
-
   const { errors, isValid } = validateSignupInput(req.body);
 
   if (!isValid) {

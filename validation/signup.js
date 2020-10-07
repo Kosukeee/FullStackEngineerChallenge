@@ -7,9 +7,7 @@ module.exports = function validateSignupInput(data) {
   data.name = isEmpty(data.name) ? "" : data.name;
   data.email = isEmpty(data.email) ? "" : data.email;
   data.password = isEmpty(data.password) ? "" : data.password;
-  data.confirmPassword = isEmpty(data.confirmPassword)
-    ? ""
-    : data.confirmPassword;
+  data.confirmPw = isEmpty(data.confirmPw) ? "" : data.confirmPw;
 
   // Empty fields check
   if (Validator.isEmpty(data.name)) {
@@ -26,8 +24,8 @@ module.exports = function validateSignupInput(data) {
     errors.password = "Password field is required";
   }
 
-  if (Validator.isEmpty(data.confirmPassword)) {
-    errors.confirmPassword = "Confirm password field is required";
+  if (Validator.isEmpty(data.confirmPw)) {
+    errors.confirmPw = "Confirm password field is required";
   }
 
   // Password must be at least 4 characters
@@ -36,8 +34,8 @@ module.exports = function validateSignupInput(data) {
   }
 
   // Password and Confirm passeord check
-  if (!Validator.equals(data.password, data.confirmPassword)) {
-    errors.confirmPassword = "Password must match";
+  if (!Validator.equals(data.password, data.confirmPw)) {
+    errors.confirmPw = "Password must match";
   }
 
   return {

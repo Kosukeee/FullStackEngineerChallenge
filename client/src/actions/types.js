@@ -3,3 +3,4 @@ export const USER_LOADING = "USER_LOADING";
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
 export const ADD_EMPLOYEE = "ADD_EMPLOYEE";
 export const SET_EMPLOYEES = "SET_EMPLOYEES";
+export const DELETE_EMPLOYEE = "DELETE_EMPLOYEE";

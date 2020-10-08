@@ -98,26 +98,28 @@ exports.postAddEmployee = (req, res, next) => {
   const { name } = req.body;
   const { evaluation } = req.body;
 
-  console.log(name);
-  console.log(evaluation);
-
   const employee = new Employee({
     name,
     evaluation,
-  });
-
-  Employee.findById(employeeId).then((employee) => {
-    if (employee) {
-      return res.redirect("/");
-    }
   });
 
   employee
     .save()
     .then((result) => {
       console.log("Employee added");
-      res.redirect("/");
+      // res.redirect("http://localhost:3001");
     })
+    .catch((err) => {
+      const error = new Error(err);
+      error.statusCode = 500;
+      return next(error);
+    });
+};
+
+exports.deleteEmployee = (req, res, next) => {
+  const employeeId = req.params.employee;
+  Employee.findByIdAndDelete(employeeId)
+    .then((result) => console.log(result))
     .catch((err) => {
       const error = new Error(err);
       error.statusCode = 500;

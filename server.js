@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 8080;
 const authRoutes = require("./routes/auth");
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(authRoutes);
 

@@ -3,6 +3,7 @@ import {
   USER_LOADING,
   ADD_EMPLOYEE,
   SET_EMPLOYEES,
+  DELETE_EMPLOYEE,
 } from "../actions/types";
 
 const isEmpty = require("is-empty");
@@ -33,10 +34,16 @@ export default function (state = initialState, action) {
         employees: state.employees.push(action.payload),
       };
     case SET_EMPLOYEES:
-      console.log(action.payload.data.employees);
       return {
         ...state,
         employees: action.payload.data.employees,
+      };
+    case DELETE_EMPLOYEE:
+      return {
+        ...state,
+        employees: state.employees.filter(
+          (employee) => employee.id !== action.payload
+        ),
       };
     default:
       return state;

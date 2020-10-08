@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const authController = require("../controllers/auth");
 const homeController = require("../controllers/home");
 
@@ -10,8 +11,10 @@ router.post("/signup", authController.postSignup);
 
 router.post("/login", authController.postLogin);
 
-router.post("/add-employee", authController.postAddEmployee);
+router.post("/employee", cors(), authController.postAddEmployee);
 
-router.get("/get-employees", homeController.getEmployees);
+router.get("/employees", homeController.getEmployees);
+
+router.delete("/employee/:employee", authController.deleteEmployee);
 
 module.exports = router;

@@ -3,9 +3,8 @@ import { GET_ERRORS, SET_EMPLOYEES } from "./types";
 
 export const getEmployees = () => (dispatch) => {
   axios
-    .get("http://localhost:8080/get-employees")
+    .get("http://localhost:8080/employees")
     .then((res) => {
-      console.log(res);
       dispatch(setEmployees(res));
     })
     .catch((err) => {

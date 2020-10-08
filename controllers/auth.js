@@ -117,9 +117,22 @@ exports.postAddEmployee = (req, res, next) => {
 };
 
 exports.deleteEmployee = (req, res, next) => {
-  const employeeId = req.params.employee;
+  const employeeId = req.params.employeeId;
+
   Employee.findByIdAndDelete(employeeId)
-    .then((result) => console.log(result))
+    .then((result) => console.log("Employee deleted"))
+    .catch((err) => {
+      const error = new Error(err);
+      error.statusCode = 500;
+      return next(error);
+    });
+};
+
+exports.putUpdateEmployee = (req, res, next) => {
+  const employeeId = req.params.employeeId;
+
+  Employee.findByIdAndUpdate(employeeId, req.body)
+    .then((result) => console.log("Employee updated"))
     .catch((err) => {
       const error = new Error(err);
       error.statusCode = 500;

@@ -7,6 +7,7 @@ import {
   USER_LOADING,
   ADD_EMPLOYEE,
   DELETE_EMPLOYEE,
+  UPDATE_EMPLOYEE,
 } from "./types";
 
 export const signupUser = (userData, history) => (dispatch) => {
@@ -95,6 +96,33 @@ export const deleteEmployee = (employeeId) => (dispatch) => {
     .then((res) => {
       console.log("Deleted");
       dispatch(setDeleteEmployee(employeeId));
+    })
+    .catch((err) => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data,
+      });
+    });
+};
+
+export const setUpdateEmployee = (employeeId, employeeData) => {
+  return {
+    type: UPDATE_EMPLOYEE,
+    payload: {
+      id: employeeId,
+      data: employeeData,
+    },
+  };
+};
+
+export const updateEmployee = (employeeId, employeeData) => (dispatch) => {
+  console.log(employeeId);
+  console.log(employeeData);
+  axios
+    .put(`http://localhost:8080/employee/${employeeId}`, employeeData)
+    .then((res) => {
+      console.log(`axios returned ${res}`);
+      dispatch(setUpdateEmployee(employeeId, employeeData));
     })
     .catch((err) => {
       dispatch({

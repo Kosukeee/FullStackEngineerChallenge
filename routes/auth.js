@@ -15,6 +15,8 @@ router.post("/employee", cors(), authController.postAddEmployee);
 
 router.get("/employees", homeController.getEmployees);
 
-router.delete("/employee/:employee", authController.deleteEmployee);
+router.delete("/employee/:employeeId", authController.deleteEmployee);
+
+router.put("/employee/:employeeId", authController.putUpdateEmployee);
 
 module.exports = router;

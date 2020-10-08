@@ -4,6 +4,7 @@ import {
   ADD_EMPLOYEE,
   SET_EMPLOYEES,
   DELETE_EMPLOYEE,
+  UPDATE_EMPLOYEE,
 } from "../actions/types";
 
 const isEmpty = require("is-empty");
@@ -44,6 +45,13 @@ export default function (state = initialState, action) {
         employees: state.employees.filter(
           (employee) => employee.id !== action.payload
         ),
+      };
+    case UPDATE_EMPLOYEE:
+      console.log("UPDATE_EMPLOYEE is called");
+      console.log(action.payload);
+      return {
+        ...state,
+        employees: action.payload,
       };
     default:
       return state;

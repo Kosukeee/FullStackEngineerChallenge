@@ -44,7 +44,7 @@ if (localStorage.jwtToken) {
   }
 }
 
-if (localStorage.isAdmin) {
+if (localStorage.isAdmin === "true") {
   store.dispatch(setAdminUser());
 }
 

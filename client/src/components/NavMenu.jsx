@@ -2,7 +2,7 @@ import React from 'react';
 import { func } from 'prop-types';
 import { connect } from 'react-redux';
 import { Link, withRouter } from "react-router-dom";
-import { logoutUser } from "../actions/authActions";
+import { logoutUser, deleteAdminUser } from "../actions/authActions";
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -19,13 +19,18 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       color: 'blue'
     }
+  },
+  userName: {
+    marginLeft: '1rem',
+    color: '#666',
   }
 }));
 
-const showAuthButton = (auth, classes, history, logoutUser) => {
+const showAuthButton = (auth, classes, history, logoutUser, deleteAdminUser) => {
   const onLogoutClick = (e) => {
     e.preventDefault();
     logoutUser(history);
+    deleteAdminUser();
     localStorage.setItem("isAdmin", false);
   };
 
@@ -52,23 +57,26 @@ const showAuthButton = (auth, classes, history, logoutUser) => {
   }
 }
 
-const NavMenu = ({ auth, logoutUser, history }) => {
+const NavMenu = ({ auth, logoutUser, deleteAdminUser, history }) => {
   const classes = useStyles();
 
   return (
     <nav className={classes.nav}>
       <Link to="/" className={classes.button}>Home</Link>
-      {showAuthButton(auth, classes, history, logoutUser)}
+      {showAuthButton(auth, classes, history, logoutUser, deleteAdminUser)}
+      { '|' }
+      <span className={classes.userName}>{auth.user.name}</span>
     </nav>
   )
 };
 
 NavMenu.propTypes = {
   logoutUser: func.isRequired,
+  deleteAdminUser: func.isRequired,
 }
 
 const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default withRouter(connect(mapStateToProps, { logoutUser })(NavMenu));
+export default withRouter(connect(mapStateToProps, { logoutUser, deleteAdminUser })(NavMenu));

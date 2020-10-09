@@ -3,7 +3,7 @@ import { GET_ERRORS, GET_EMPLOYEES } from "./types";
 
 export const loadEmployees = () => (dispatch) => {
   axios
-    .get("http://localhost:8080/employees")
+    .get("http://localhost:8080/api/employees")
     .then((res) => {
       dispatch(getEmployees(res));
     })

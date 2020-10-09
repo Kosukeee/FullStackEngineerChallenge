@@ -20,6 +20,9 @@ const useStyles = makeStyles((theme) => ({
   form: {
     textAlign: 'center'
   },
+  employeeList: {
+    marginBottom: '1rem'
+  }
 }));
 
 const Home = ({ employees, addEmployee, deleteEmployee, loadEmployees, updateEmployee }) => {
@@ -96,7 +99,7 @@ const Home = ({ employees, addEmployee, deleteEmployee, loadEmployees, updateEmp
   const showEployeesList = () => {
     const employeesList = employees.map(employee => {
       return (
-        <div key={employee._id}>
+        <div key={employee._id} className={classes.employeeList}>
           {editEmployeeId === employee._id ? (
             <>
               <form className={classes.form} noValidate onSubmit={onUpdate} data-employee-id={employee._id}>

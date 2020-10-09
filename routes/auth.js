@@ -11,12 +11,12 @@ router.post("/signup", authController.postSignup);
 
 router.post("/login", authController.postLogin);
 
-router.post("/employee", authController.postAddEmployee);
+router.post("/api/admin/employee", authController.postAddEmployee);
 
-router.get("/employees", homeController.getEmployees);
+router.get("/api/employees", homeController.getEmployees);
 
-router.delete("/employee/:employeeId", authController.deleteEmployee);
+router.delete("/api/admin/employee/:employeeId", authController.deleteEmployee);
 
-router.put("/employee/:employeeId", authController.putUpdateEmployee);
+router.put("/api/admin/employee/:employeeId", authController.putUpdateEmployee);
 
 module.exports = router;

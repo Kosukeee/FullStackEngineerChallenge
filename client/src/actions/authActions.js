@@ -69,7 +69,7 @@ export const setEmployee = (newEmployee) => {
 
 export const addEmployee = (employeeData) => (dispatch) => {
   axios
-    .post("http://localhost:8080/employee", employeeData)
+    .post("http://localhost:8080/api/admin/employee", employeeData)
     .then((res) => {
       dispatch(setEmployee(res.data));
     })
@@ -91,7 +91,7 @@ export const setDeleteEmployee = (employeeId) => {
 
 export const deleteEmployee = (employeeId) => (dispatch) => {
   axios
-    .delete(`http://localhost:8080/employee/${employeeId}`)
+    .delete(`http://localhost:8080/api/admin/employee/${employeeId}`)
     .then((res) => {
       dispatch(setDeleteEmployee(res.data._id));
     })
@@ -114,7 +114,10 @@ export const updateEmployee = (employeeId, updatedEmployeeData) => (
   dispatch
 ) => {
   axios
-    .put(`http://localhost:8080/employee/${employeeId}`, updatedEmployeeData)
+    .put(
+      `http://localhost:8080/api/admin/employee/${employeeId}`,
+      updatedEmployeeData
+    )
     .then((res) => {
       dispatch(setUpdateEmployee(res.data));
     })

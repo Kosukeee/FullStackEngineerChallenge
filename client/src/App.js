@@ -59,10 +59,9 @@ function App() {
             <NavMenu />
             <Switch>
               <Route exact path="/" component={Home} />
-              <Route path="/admin" component={Admin} />
+              <PrivateRoute exact path="/admin" component={Admin} />
               <Route path="/signup" component={Signup} />
               <Route path="/login" component={Login} />
-              <PrivateRoute exact path="/admin" component={Admin} />
             </Switch>
           </Grid>
         </div>

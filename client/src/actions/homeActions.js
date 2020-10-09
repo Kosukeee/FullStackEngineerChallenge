@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GET_ERRORS, GET_EMPLOYEES } from "./types";
+import { GET_EMPLOYEES } from "./types";
 
 export const loadEmployees = () => (dispatch) => {
   axios
@@ -8,10 +8,7 @@ export const loadEmployees = () => (dispatch) => {
       dispatch(getEmployees(res));
     })
     .catch((err) => {
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data,
-      });
+      console.error(new Error(err));
     });
 };
 

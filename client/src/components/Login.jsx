@@ -21,13 +21,15 @@ const useStyles = makeStyles((theme) => ({
   },
   textField: {
     margin: '0 1rem',
+  },
+  inputFieldContainer: {
+    marginBottom: '1rem',
   }
 }));
 
-const Login = ({ loginUser, history, auth }) => {
+const Login = ({ loginUser, history, auth, errors }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState({});
   const classes = useStyles();
 
   const onChange = e => {
@@ -57,10 +59,7 @@ const Login = ({ loginUser, history, auth }) => {
     if (auth.isAuthenticated) {
       history.push('/');
     }
-    if (errors) {
-      setErrors(errors);
-    }
-  }, [auth.isAuthenticated, errors, history])
+  }, [auth.isAuthenticated, history])
 
   useEffect(() => {
     if (auth.isAuthenticated) {
@@ -72,7 +71,7 @@ const Login = ({ loginUser, history, auth }) => {
     <Grid item xs={12}>
       <h1 className={classes.headline}>Log In</h1>
       <form className={classes.form} noValidate onSubmit={onSubmit}>
-        <div>
+        <div className={classes.inputFieldContainer}>
           <TextField onChange={onChange} value={email} error={errors.email} className={classes.textField} id="email" label="Email" />
           <TextField onChange={onChange} value={password} error={errors.password} className={classes.textField} id="password" label="Password" />
         </div>
@@ -84,7 +83,7 @@ const Login = ({ loginUser, history, auth }) => {
 
 Login.propTypes = {
   loginUser: func.isRequired,
-  auth: object.isRquired,
+  auth: object.isRequired,
   errors: object.isRequired
 };
 

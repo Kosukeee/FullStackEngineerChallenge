@@ -11,11 +11,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 
 import Home from "./components/Home";
+import Admin from "./components/Admin";
 import NavMenu from "./components/NavMenu";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
 import PrivateRoute from "./components/PrivateRoute";
-import Admin from "./components/Admin";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,6 +51,7 @@ function App() {
             <NavMenu />
             <Switch>
               <Route exact path="/" component={Home} />
+              <Route path="/admin" component={Admin} />
               <Route path="/signup" component={Signup} />
               <Route path="/login" component={Login} />
               <PrivateRoute exact path="/admin" component={Admin} />

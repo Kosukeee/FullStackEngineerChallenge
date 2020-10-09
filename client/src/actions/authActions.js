@@ -54,10 +54,12 @@ export const setUserLoading = () => {
   };
 };
 
-export const logoutUser = () => (dispatch) => {
+export const logoutUser = (history) => (dispatch) => {
+  console.log("logoutUser is caleed");
   localStorage.removeItem("jwtToken");
   setAuthToken(false);
   dispatch(setCurrentUser({}));
+  history.push("/login");
 };
 
 export const setEmployee = (newEmployee) => {

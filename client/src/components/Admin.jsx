@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { func } from 'prop-types';
 import { addEmployee, deleteEmployee, updateEmployee } from "../actions/authActions";
 import { loadEmployees } from "../actions/homeActions";
+import { logoutUser } from "../actions/authActions";
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from  '@material-ui/core/Paper';
@@ -22,16 +23,27 @@ const useStyles = makeStyles((theme) => ({
   },
   employeeList: {
     marginBottom: '1rem'
+  },
+  inputField: {
+    marginRight: '1rem',
+  },
+  inputFieldContainer: {
+    marginBottom: '1rem',
   }
 }));
 
-const Home = ({ employees, addEmployee, deleteEmployee, loadEmployees, updateEmployee }) => {
+const Admin = ({ user, employees, history, addEmployee, deleteEmployee, loadEmployees, updateEmployee, logoutUser }) => {
   const [name, setName] = useState('');
   const [evaluation, setEvaluation] = useState('');
   const [nameEdit, setNameEdit] = useState('');
   const [evaluationEdit, setEvaluationEdit] = useState('');
   const [editEmployeeId, setEditEmployeeId] = useState('');
   const classes = useStyles();
+
+  const onLogoutClick = (e) => {
+    e.preventDefault();
+    logoutUser(history);
+  };
 
   const onChange = e => {
     const { value } = e.target;
@@ -103,11 +115,11 @@ const Home = ({ employees, addEmployee, deleteEmployee, loadEmployees, updateEmp
           {editEmployeeId === employee._id ? (
             <>
               <form className={classes.form} noValidate onSubmit={onUpdate} data-employee-id={employee._id}>
-                <div>
-                  <TextField onChange={onChange} value={nameEdit} id="nameEdit" label="Name" />
-                  <TextField onChange={onChange} value={evaluationEdit} id="evaluationEdit" label="Evaluation" />
+                <div className={classes.inputFieldContainer}>
+                  <TextField onChange={onChange} value={nameEdit} id="nameEdit" label="Name" className={classes.inputField} />
+                  <TextField onChange={onChange} value={evaluationEdit} id="evaluationEdit" label="Evaluation" multiline rows={1} />
                 </div>
-                <Button type="button" variant="contained" onClick={onEditCancel}>Cancel</Button>
+                <Button type="button" variant="contained" onClick={onEditCancel} className={classes.inputField}>Cancel</Button>
                 <Button type="submit" variant="contained">Update</Button>
               </form>
             </>
@@ -115,7 +127,7 @@ const Home = ({ employees, addEmployee, deleteEmployee, loadEmployees, updateEmp
             <>
               <div>Name: {employee.name}</div>
               <div>Evaluation: {employee.evaluation}</div>
-              <Button type="button" variant="contained" onClick={onDeleteEmployee} data-employee-id={employee._id}>Delete</Button>
+              <Button type="button" variant="contained" onClick={onDeleteEmployee} data-employee-id={employee._id} className={classes.inputField}>Delete</Button>
               <Button type="button" variant="contained" onClick={e => onEditEmployee(employee.name, employee.evaluation, e)} data-employee-id={employee._id}>Edit</Button>
             </>
           )}
@@ -137,11 +149,13 @@ const Home = ({ employees, addEmployee, deleteEmployee, loadEmployees, updateEmp
   return (
     <Grid item xs={12}>
       <Paper className={classes.paper}>
+        <h2>Admin Page</h2>
+        <Button variant="outlined" onClick={onLogoutClick}>Logout</Button>
         <h1>Employee Performance Review</h1>
         <form className={classes.form} noValidate onSubmit={onSubmit}>
-          <div>
-            <TextField onChange={onChange} value={name} id="name" label="Name" />
-            <TextField onChange={onChange} value={evaluation} id="evaluation" label="Evaluation" />
+          <div className={classes.inputFieldContainer}>
+            <TextField onChange={onChange} value={name} id="name" label="Name" className={classes.inputField} />
+            <TextField onChange={onChange} value={evaluation} id="evaluation" label="Evaluation" multiline rows={1} />
           </div>
           <Button type="submit" variant="contained">Add Employee</Button>
         </form>
@@ -154,15 +168,17 @@ const Home = ({ employees, addEmployee, deleteEmployee, loadEmployees, updateEmp
   )
 }
 
-Home.propTypes = {
+Admin.propTypes = {
   addEmployee: func,
   deleteEmployee: func,
   loadEmployees: func,
   updateEmployee: func,
+  logoutUser: func.isRequired,
 };
 
-const mapStateToProps = ({ auth }) => ({
-  employees: auth.employees
+const mapStateToProps = (state) => ({
+  user: state.auth.user,
+  employees: state.auth.employees,
 });
 
-export default connect(mapStateToProps, { addEmployee, deleteEmployee, loadEmployees, updateEmployee })(Home);
+export default connect(mapStateToProps, { addEmployee, deleteEmployee, loadEmployees, updateEmployee, logoutUser })(Admin);

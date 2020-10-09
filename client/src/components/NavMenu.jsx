@@ -65,7 +65,7 @@ const NavMenu = ({ auth, logoutUser, deleteAdminUser, history }) => {
       <Link to="/" className={classes.button}>Home</Link>
       {showAuthButton(auth, classes, history, logoutUser, deleteAdminUser)}
       { '|' }
-      <span className={classes.userName}>{auth.user.name}</span>
+      <span className={classes.userName}>{auth.currentUser.name}</span>
     </nav>
   )
 };

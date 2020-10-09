@@ -169,7 +169,6 @@ Admin.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  user: state.auth.user,
   employees: state.auth.employees,
 });
 

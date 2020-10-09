@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { func } from 'prop-types';
 import { addEmployee, deleteEmployee, updateEmployee } from "../actions/authActions";
 import { loadEmployees } from "../actions/homeActions";
-import { logoutUser } from "../actions/authActions";
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from  '@material-ui/core/Paper';
@@ -32,18 +31,13 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Admin = ({ user, employees, history, addEmployee, deleteEmployee, loadEmployees, updateEmployee, logoutUser }) => {
+const Admin = ({ employees, addEmployee, deleteEmployee, loadEmployees, updateEmployee }) => {
   const [name, setName] = useState('');
   const [evaluation, setEvaluation] = useState('');
   const [nameEdit, setNameEdit] = useState('');
   const [evaluationEdit, setEvaluationEdit] = useState('');
   const [editEmployeeId, setEditEmployeeId] = useState('');
   const classes = useStyles();
-
-  const onLogoutClick = (e) => {
-    e.preventDefault();
-    logoutUser(history);
-  };
 
   const onChange = e => {
     const { value } = e.target;
@@ -150,7 +144,6 @@ const Admin = ({ user, employees, history, addEmployee, deleteEmployee, loadEmpl
     <Grid item xs={12}>
       <Paper className={classes.paper}>
         <h2>Admin Page</h2>
-        <Button variant="outlined" onClick={onLogoutClick}>Logout</Button>
         <h1>Employee Performance Review</h1>
         <form className={classes.form} noValidate onSubmit={onSubmit}>
           <div className={classes.inputFieldContainer}>
@@ -173,7 +166,6 @@ Admin.propTypes = {
   deleteEmployee: func,
   loadEmployees: func,
   updateEmployee: func,
-  logoutUser: func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
@@ -181,4 +173,4 @@ const mapStateToProps = (state) => ({
   employees: state.auth.employees,
 });
 
-export default connect(mapStateToProps, { addEmployee, deleteEmployee, loadEmployees, updateEmployee, logoutUser })(Admin);
+export default connect(mapStateToProps, { addEmployee, deleteEmployee, loadEmployees, updateEmployee })(Admin);

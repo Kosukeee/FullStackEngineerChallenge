@@ -15,10 +15,9 @@ exports.getSignup = (req, res, next) => {
 };
 
 exports.postSignup = async (req, res, next) => {
-  console.log("signing up");
-  const email = req.body.email;
-  const name = req.body.name;
-  const password = req.body.password;
+  const { email } = req.body;
+  const { name } = req.body;
+  const { password } = req.body;
 
   const { errors, isValid } = validateSignupInput(req.body);
 
@@ -113,7 +112,6 @@ exports.postAddEmployee = (req, res, next) => {
   employee
     .save()
     .then((result) => {
-      console.log("Employee added");
       res.status(200).send(result);
     })
     .catch((err) => {
@@ -127,7 +125,6 @@ exports.deleteEmployee = (req, res, next) => {
 
   Employee.findByIdAndDelete(employeeId)
     .then((result) => {
-      console.log("Employee deleted");
       res.status(200).send(result);
     })
     .catch((err) => {
@@ -141,7 +138,6 @@ exports.putUpdateEmployee = (req, res, next) => {
 
   Employee.findByIdAndUpdate(employeeId, req.body, { new: true })
     .then((result) => {
-      console.log("Employee updated");
       res.status(200).send(result);
     })
     .catch((err) => {

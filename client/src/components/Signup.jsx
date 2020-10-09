@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { withRouter } from 'react-router-dom';
 import { func, object } from 'prop-types';
 import { connect } from 'react-redux';
 import { signupUser } from "../actions/authActions";
@@ -22,6 +21,9 @@ const useStyles = makeStyles((theme) => ({
   },
   textField: {
     margin: '0 1rem',
+  },
+  inputFieldContainer: {
+    marginBottom: '1rem',
   }
 }));
 
@@ -81,7 +83,7 @@ const Signup = ({ signupUser, history, auth, errors }) => {
     <Grid item xs={12}>
       <h1 className={classes.headline}>Sign Up</h1>
       <form className={classes.form} noValidate onSubmit={onSubmit}>
-        <div>
+        <div className={classes.inputFieldContainer}>
           <TextField onChange={onChange} value={name} error={updatedErrors.name} className={classnames(classes.textField, { invalid: updatedErrors.name })} id="name" label="Name" />
           <TextField onChange={onChange} value={email} error={updatedErrors.email} className={classnames(classes.textField, { invalid: updatedErrors.email })} id="email" label="Email" />
           <TextField onChange={onChange} value={password} error={updatedErrors.password} className={classnames(classes.textField, { invalid: updatedErrors.password })} id="password" label="Password" />
@@ -99,9 +101,13 @@ Signup.propTypes = {
   errors: object.isRequired
 };
 
-const mapStateToProps = state => ({
-  auth: state.auth,
-  errros: state.errors
-});
+const mapStateToProps = state => {
+  return (
+    {
+      auth: state.auth,
+      errors: state.errors
+    }
+  )
+};
 
-export default connect(mapStateToProps, { signupUser })(withRouter(Signup));
+export default connect(mapStateToProps, { signupUser })(Signup);

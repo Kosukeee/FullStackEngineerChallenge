@@ -1,11 +1,15 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import jwt_decode from "jwt-decode";
-import setAuthToken from "./utils/setAuthToken";
-import { setCurrentUser, logoutUser } from "./actions/authActions";
-
 import { Provider } from "react-redux";
 import store from "./store";
+
+import {
+  setCurrentUser,
+  logoutUser,
+  setAdminUser,
+} from "./actions/authActions";
+import setAuthToken from "./utils/setAuthToken";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -38,6 +42,10 @@ if (localStorage.jwtToken) {
   } catch (err) {
     console.log(err);
   }
+}
+
+if (localStorage.isAdmin) {
+  store.dispatch(setAdminUser());
 }
 
 function App() {

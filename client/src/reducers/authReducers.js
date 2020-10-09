@@ -5,12 +5,15 @@ import {
   GET_EMPLOYEES,
   DELETE_EMPLOYEE,
   UPDATE_EMPLOYEE,
+  SET_ADMIN_USER,
+  DELETE_ADMIN_USER,
 } from "../actions/types";
 
 const isEmpty = require("is-empty");
 
 const initialState = {
   isAuthenticated: false,
+  isAdmin: false,
   user: {},
   loading: false,
   employees: [],
@@ -56,6 +59,16 @@ export default function (state = initialState, action) {
       return {
         ...state,
         employees: newArray,
+      };
+    case SET_ADMIN_USER:
+      return {
+        ...state,
+        isAdmin: true,
+      };
+    case DELETE_ADMIN_USER:
+      return {
+        ...state,
+        isAdmin: false,
       };
     default:
       return state;

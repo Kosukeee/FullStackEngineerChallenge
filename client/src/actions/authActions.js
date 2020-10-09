@@ -8,6 +8,8 @@ import {
   ADD_EMPLOYEE,
   DELETE_EMPLOYEE,
   UPDATE_EMPLOYEE,
+  SET_ADMIN_USER,
+  DELETE_ADMIN_USER,
 } from "./types";
 
 export const signupUser = (userData, history) => (dispatch) => {
@@ -27,10 +29,16 @@ export const loginUser = (userData) => (dispatch) => {
   axios
     .post("/login", userData)
     .then((res) => {
+      const isAdmin = userData.email === "admin@test.com";
       const { token } = res.data;
-      localStorage.setItem("jwtToken", token);
-      setAuthToken(token);
       const decoded = jwt_decode(token);
+
+      localStorage.setItem("jwtToken", token);
+      if (isAdmin) {
+        localStorage.setItem("isAdmin", true);
+        dispatch(setAdminUser());
+      }
+      setAuthToken(token);
       dispatch(setCurrentUser(decoded));
     })
     .catch((err) => {
@@ -39,6 +47,18 @@ export const loginUser = (userData) => (dispatch) => {
         payload: err.response.data,
       });
     });
+};
+
+export const setAdminUser = () => {
+  return {
+    type: SET_ADMIN_USER,
+  };
+};
+
+export const deleteAdminUser = () => {
+  return {
+    type: DELETE_ADMIN_USER,
+  };
 };
 
 export const setCurrentUser = (decoded) => {
@@ -55,9 +75,9 @@ export const setUserLoading = () => {
 };
 
 export const logoutUser = (history) => (dispatch) => {
-  console.log("logoutUser is caleed");
   localStorage.removeItem("jwtToken");
   setAuthToken(false);
+  dispatch(deleteAdminUser());
   dispatch(setCurrentUser({}));
   history.push("/login");
 };

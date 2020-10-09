@@ -60,10 +60,10 @@ export const logoutUser = () => (dispatch) => {
   dispatch(setCurrentUser({}));
 };
 
-export const setEmployee = (employeeData) => {
+export const setEmployee = (newEmployee) => {
   return {
     type: ADD_EMPLOYEE,
-    payload: employeeData,
+    payload: newEmployee,
   };
 };
 
@@ -71,8 +71,7 @@ export const addEmployee = (employeeData) => (dispatch) => {
   axios
     .post("http://localhost:8080/employee", employeeData)
     .then((res) => {
-      console.log(res);
-      dispatch(setEmployee(employeeData));
+      dispatch(setEmployee(res.data));
     })
     .catch((err) => {
       console.log(err);
@@ -94,8 +93,7 @@ export const deleteEmployee = (employeeId) => (dispatch) => {
   axios
     .delete(`http://localhost:8080/employee/${employeeId}`)
     .then((res) => {
-      console.log("Deleted");
-      dispatch(setDeleteEmployee(employeeId));
+      dispatch(setDeleteEmployee(res.data._id));
     })
     .catch((err) => {
       dispatch({
@@ -105,24 +103,20 @@ export const deleteEmployee = (employeeId) => (dispatch) => {
     });
 };
 
-export const setUpdateEmployee = (employeeId, employeeData) => {
+export const setUpdateEmployee = (employeeData) => {
   return {
     type: UPDATE_EMPLOYEE,
-    payload: {
-      id: employeeId,
-      data: employeeData,
-    },
+    payload: employeeData,
   };
 };
 
-export const updateEmployee = (employeeId, employeeData) => (dispatch) => {
-  console.log(employeeId);
-  console.log(employeeData);
+export const updateEmployee = (employeeId, updatedEmployeeData) => (
+  dispatch
+) => {
   axios
-    .put(`http://localhost:8080/employee/${employeeId}`, employeeData)
+    .put(`http://localhost:8080/employee/${employeeId}`, updatedEmployeeData)
     .then((res) => {
-      console.log(`axios returned ${res}`);
-      dispatch(setUpdateEmployee(employeeId, employeeData));
+      dispatch(setUpdateEmployee(res.data));
     })
     .catch((err) => {
       dispatch({

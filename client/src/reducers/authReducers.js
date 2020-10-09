@@ -2,7 +2,7 @@ import {
   SET_CURRENT_USER,
   USER_LOADING,
   ADD_EMPLOYEE,
-  SET_EMPLOYEES,
+  GET_EMPLOYEES,
   DELETE_EMPLOYEE,
   UPDATE_EMPLOYEE,
 } from "../actions/types";
@@ -32,9 +32,9 @@ export default function (state = initialState, action) {
     case ADD_EMPLOYEE:
       return {
         ...state,
-        employees: state.employees.push(action.payload),
+        employees: [...state.employees, action.payload],
       };
-    case SET_EMPLOYEES:
+    case GET_EMPLOYEES:
       return {
         ...state,
         employees: action.payload.data.employees,
@@ -43,15 +43,19 @@ export default function (state = initialState, action) {
       return {
         ...state,
         employees: state.employees.filter(
-          (employee) => employee.id !== action.payload
+          (employee) => employee._id !== action.payload
         ),
       };
     case UPDATE_EMPLOYEE:
-      console.log("UPDATE_EMPLOYEE is called");
-      console.log(action.payload);
+      const index = state.employees.findIndex(
+        (employee) => employee._id === action.payload._id
+      );
+      const newArray = [...state.employees];
+      newArray[index] = action.payload;
+
       return {
         ...state,
-        employees: action.payload,
+        employees: newArray,
       };
     default:
       return state;

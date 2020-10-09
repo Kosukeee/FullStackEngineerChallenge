@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { func } from 'prop-types';
 import { addEmployee, deleteEmployee, updateEmployee } from "../actions/authActions";
-import { getEmployees } from "../actions/homeActions";
+import { loadEmployees } from "../actions/homeActions";
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from  '@material-ui/core/Paper';
@@ -22,12 +22,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Home = ({ auth, addEmployee, deleteEmployee, getEmployees, updateEmployee }) => {
+const Home = ({ employees, addEmployee, deleteEmployee, loadEmployees, updateEmployee }) => {
   const [name, setName] = useState('');
   const [evaluation, setEvaluation] = useState('');
   const [nameEdit, setNameEdit] = useState('');
   const [evaluationEdit, setEvaluationEdit] = useState('');
-  const [employees, setEmployees] = useState([]);
   const [editEmployeeId, setEditEmployeeId] = useState('');
   const classes = useStyles();
 
@@ -56,6 +55,8 @@ const Home = ({ auth, addEmployee, deleteEmployee, getEmployees, updateEmployee 
       evaluation,
     };
     addEmployee(employee);
+    setName('');
+    setEvaluation('');
   };
 
   const onDeleteEmployee = e => {
@@ -88,6 +89,8 @@ const Home = ({ auth, addEmployee, deleteEmployee, getEmployees, updateEmployee 
     };
     updateEmployee(employeeId, updatedEmployee);
     setEditEmployeeId('');
+    setNameEdit('');
+    setEvaluationEdit('');
   }
 
   const showEployeesList = () => {
@@ -125,27 +128,25 @@ const Home = ({ auth, addEmployee, deleteEmployee, getEmployees, updateEmployee 
   }
 
   useEffect(() => {
-    getEmployees();
-  }, [getEmployees]);
-
-  useEffect(() => {
-    setEmployees(auth.employees);
-  }, [auth.employees]);
+    loadEmployees();
+  }, []);
 
   return (
     <Grid item xs={12}>
-      <Paper className={classes.paper}>Employee Performance Review</Paper>
-      <form className={classes.form} noValidate onSubmit={onSubmit}>
-        <div>
-          <TextField onChange={onChange} value={name} id="name" label="Name" />
-          <TextField onChange={onChange} value={evaluation} id="evaluation" label="Evaluation" />
+      <Paper className={classes.paper}>
+        <h1>Employee Performance Review</h1>
+        <form className={classes.form} noValidate onSubmit={onSubmit}>
+          <div>
+            <TextField onChange={onChange} value={name} id="name" label="Name" />
+            <TextField onChange={onChange} value={evaluation} id="evaluation" label="Evaluation" />
+          </div>
+          <Button type="submit" variant="contained">Add Employee</Button>
+        </form>
+        <div className={classes.form}>
+          <h2>List of Employees</h2>
+          {showEployeesList()}
         </div>
-        <Button type="submit" variant="contained">Add Employee</Button>
-      </form>
-      <div className={classes.form}>
-        <h2>List of Employees</h2>
-        {showEployeesList()}
-      </div>
+      </Paper>
     </Grid>
   )
 }
@@ -153,12 +154,12 @@ const Home = ({ auth, addEmployee, deleteEmployee, getEmployees, updateEmployee 
 Home.propTypes = {
   addEmployee: func,
   deleteEmployee: func,
-  getEmployees: func,
+  loadEmployees: func,
   updateEmployee: func,
 };
 
-const mapStateToProps = state => ({
-  auth: state.auth
+const mapStateToProps = ({ auth }) => ({
+  employees: auth.employees
 });
 
-export default connect(mapStateToProps, { addEmployee, deleteEmployee, getEmployees, updateEmployee })(Home);
+export default connect(mapStateToProps, { addEmployee, deleteEmployee, loadEmployees, updateEmployee })(Home);

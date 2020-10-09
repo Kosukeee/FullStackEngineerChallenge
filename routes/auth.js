@@ -11,7 +11,7 @@ router.post("/signup", authController.postSignup);
 
 router.post("/login", authController.postLogin);
 
-router.post("/employee", cors(), authController.postAddEmployee);
+router.post("/employee", authController.postAddEmployee);
 
 router.get("/employees", homeController.getEmployees);
 

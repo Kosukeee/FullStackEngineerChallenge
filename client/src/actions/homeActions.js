@@ -1,11 +1,11 @@
 import axios from "axios";
-import { GET_ERRORS, SET_EMPLOYEES } from "./types";
+import { GET_ERRORS, GET_EMPLOYEES } from "./types";
 
-export const getEmployees = () => (dispatch) => {
+export const loadEmployees = () => (dispatch) => {
   axios
     .get("http://localhost:8080/employees")
     .then((res) => {
-      dispatch(setEmployees(res));
+      dispatch(getEmployees(res));
     })
     .catch((err) => {
       dispatch({
@@ -15,9 +15,9 @@ export const getEmployees = () => (dispatch) => {
     });
 };
 
-export const setEmployees = (employees) => {
+export const getEmployees = (employees) => {
   return {
-    type: SET_EMPLOYEES,
+    type: GET_EMPLOYEES,
     payload: employees,
   };
 };

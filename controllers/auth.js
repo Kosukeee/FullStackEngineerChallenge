@@ -94,6 +94,13 @@ exports.postLogin = async (req, res, next) => {
   });
 };
 
+const createaError = () => {
+  const error = new Error(err);
+  error.statusCode = 500;
+
+  return error;
+};
+
 exports.postAddEmployee = (req, res, next) => {
   const { name } = req.body;
   const { evaluation } = req.body;
@@ -107,11 +114,10 @@ exports.postAddEmployee = (req, res, next) => {
     .save()
     .then((result) => {
       console.log("Employee added");
-      // res.redirect("http://localhost:3001");
+      res.status(200).send(result);
     })
     .catch((err) => {
-      const error = new Error(err);
-      error.statusCode = 500;
+      const error = createaError();
       return next(error);
     });
 };
@@ -120,10 +126,12 @@ exports.deleteEmployee = (req, res, next) => {
   const employeeId = req.params.employeeId;
 
   Employee.findByIdAndDelete(employeeId)
-    .then((result) => console.log("Employee deleted"))
+    .then((result) => {
+      console.log("Employee deleted");
+      res.status(200).send(result);
+    })
     .catch((err) => {
-      const error = new Error(err);
-      error.statusCode = 500;
+      const error = createaError();
       return next(error);
     });
 };
@@ -131,11 +139,13 @@ exports.deleteEmployee = (req, res, next) => {
 exports.putUpdateEmployee = (req, res, next) => {
   const employeeId = req.params.employeeId;
 
-  Employee.findByIdAndUpdate(employeeId, req.body)
-    .then((result) => console.log("Employee updated"))
+  Employee.findByIdAndUpdate(employeeId, req.body, { new: true })
+    .then((result) => {
+      console.log("Employee updated");
+      res.status(200).send(result);
+    })
     .catch((err) => {
-      const error = new Error(err);
-      error.statusCode = 500;
+      const error = createaError();
       return next(error);
     });
 };

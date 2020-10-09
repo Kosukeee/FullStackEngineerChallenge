@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 
 if (localStorage.jwtToken) {
   try {
-    const token = localStorage.jwt_decode;
+    const token = localStorage.jwtToken;
     setAuthToken(token);
     const decoded = jwt_decode(token);
     store.dispatch(setCurrentUser(decoded));

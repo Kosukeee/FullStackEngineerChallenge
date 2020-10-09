@@ -6,8 +6,8 @@ exports.getEmployees = (req, res, next) => {
       return res.json({ employees });
     })
     .catch((err) => {
-      const errors = new Error(err);
-      errors.statusCode = 500;
-      next(errors);
+      const error = new Error(err);
+      error.statusCode = 500;
+      next(error);
     });
 };

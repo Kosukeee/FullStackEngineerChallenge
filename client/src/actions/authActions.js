@@ -1,6 +1,6 @@
 import axios from "axios";
-import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
+import setAuthToken from "../utils/setAuthToken";
 import {
   GET_ERRORS,
   SET_CURRENT_USER,
@@ -8,6 +8,19 @@ import {
   SET_ADMIN_USER,
   DELETE_ADMIN_USER,
 } from "./types";
+
+export const setAdminUser = () => {
+  return {
+    type: SET_ADMIN_USER,
+  };
+};
+
+export const setCurrentUser = (decoded) => {
+  return {
+    type: SET_CURRENT_USER,
+    payload: decoded,
+  };
+};
 
 export const loginUser = (userData) => (dispatch) => {
   axios
@@ -33,22 +46,9 @@ export const loginUser = (userData) => (dispatch) => {
     });
 };
 
-export const setAdminUser = () => {
-  return {
-    type: SET_ADMIN_USER,
-  };
-};
-
 export const deleteAdminUser = () => {
   return {
     type: DELETE_ADMIN_USER,
-  };
-};
-
-export const setCurrentUser = (decoded) => {
-  return {
-    type: SET_CURRENT_USER,
-    payload: decoded,
   };
 };
 

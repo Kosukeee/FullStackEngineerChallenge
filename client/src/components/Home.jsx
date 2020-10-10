@@ -1,73 +1,80 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { func } from 'prop-types';
-import { loadEmployees } from '../actions/employeeActions';
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import { func } from "prop-types";
+import { loadEmployees } from "../actions/employeeActions";
 import { loadFeedbacks, postFeedback } from "../actions/feedbackActions";
-import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Paper from  '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import { makeStyles } from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   paper: {
     padding: theme.spacing(2),
-    textAlign: 'center'
+    textAlign: "center",
   },
   form: {
-    textAlign: 'center',
-    marginBottom: '1rem'
+    textAlign: "center",
+    marginBottom: "1rem",
   },
   employeeList: {
-    marginBottom: '1rem',
-    paddingBottom: '1rem',
-    borderBottom: '1px solid #ccc',
-    width: '60vw',
-    marginLeft: 'auto',
-    marginRight: 'auto'
+    marginBottom: "1rem",
+    paddingBottom: "1rem",
+    borderBottom: "1px solid #ccc",
+    width: "60vw",
+    marginLeft: "auto",
+    marginRight: "auto",
   },
   feedbackWrapper: {
-    width: '60vw',
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    width: "60vw",
+    marginLeft: "auto",
+    marginRight: "auto",
   },
   feedbacksContainer: {
-    marginTop: '1rem',
+    marginTop: "1rem",
   },
   feedbackButton: {
-    marginTop: '1rem',
-    marginBottom: '1rem'
+    marginTop: "1rem",
+    marginBottom: "1rem",
   },
   feedback: {
-    marginBottom: '1rem'
+    marginBottom: "1rem",
   },
   feedbackHeadline: {
-    fontWeight: 'bold'
+    fontWeight: "bold",
   },
   inputFieldContainer: {
-    marginBottom: '1rem',
+    marginBottom: "1rem",
   },
   inputField: {
-    marginRight: '1rem',
+    marginRight: "1rem",
   },
 }));
 
-const Home = ({ currentUser, employees, feedbacks, loadEmployees, postFeedback, loadFeedbacks }) => {
-  const [editEmployeeId, setEditEmployeeId] = useState('');
-  const [feedback, setFeedback] = useState('');
+const Home = ({
+  currentUser,
+  employees,
+  feedbacks,
+  loadEmployees,
+  postFeedback,
+  loadFeedbacks,
+}) => {
+  const [editEmployeeId, setEditEmployeeId] = useState("");
+  const [feedback, setFeedback] = useState("");
   const [isFeedbackEditing, setIsFeedbackEditing] = useState(false);
   const classes = useStyles();
 
-  const onChange = e => {
+  const onChange = (e) => {
     const { value } = e.target;
 
     setFeedback(value);
   };
 
-  const onPostFeedback = e => {
+  const onPostFeedback = (e) => {
     e.preventDefault();
 
     const targetEmployeeId = e.target.dataset.employeeId;
@@ -78,29 +85,31 @@ const Home = ({ currentUser, employees, feedbacks, loadEmployees, postFeedback, 
       createdEmployeeName: currentUser.name,
     };
     postFeedback(newFeedback);
-    setFeedback('');
+    setFeedback("");
     setIsFeedbackEditing(false);
-  }
+  };
 
   const onActivateFeedbackForm = (employeeId) => {
     setIsFeedbackEditing(true);
     setEditEmployeeId(employeeId);
-  }
+  };
 
   const onCancelClick = () => {
     setIsFeedbackEditing(false);
-    setFeedback('');
-  }
+    setFeedback("");
+  };
 
   const renderFeedbacks = (feedbacks, employee) => {
-    const filteredFeedbacks = feedbacks.filter(feedback => feedback.targetEmployeeId === employee._id);
-    const feedbackLists = filteredFeedbacks.map(feedback => {
+    const filteredFeedbacks = feedbacks.filter(
+      (feedback) => feedback.targetEmployeeId === employee._id
+    );
+    const feedbackLists = filteredFeedbacks.map((feedback) => {
       return (
         <div key={feedback._id} className={classes.feedback}>
           <div>{feedback.comment}</div>
           <div>By: {feedback.createdEmployeeName}</div>
         </div>
-      )
+      );
     });
 
     return (
@@ -108,48 +117,73 @@ const Home = ({ currentUser, employees, feedbacks, loadEmployees, postFeedback, 
         <div className={classes.feedbackHeadline}>Feedbacks: </div>
         {feedbackLists}
       </div>
-    )
-  }
+    );
+  };
 
   const renderPostFeedbackButton = (currentUser, employee) => {
     if (currentUser.isReviewer && currentUser.id !== employee._id) {
       return (
-        <Button type="button" variant="contained" onClick={e => onActivateFeedbackForm(employee._id)} className={classes.feedbackButton}>Post Feedback</Button>
-      )
+        <Button
+          type="button"
+          variant="contained"
+          onClick={(e) => onActivateFeedbackForm(employee._id)}
+          className={classes.feedbackButton}
+        >
+          Post Feedback
+        </Button>
+      );
     }
     return;
-  }
+  };
 
   const showEployeesList = () => {
-    const employeesList = employees.map(employee => {
+    const employeesList = employees.map((employee) => {
       return (
         <div key={employee._id} className={classes.employeeList}>
           <div>Name: {employee.name}</div>
           <div>Evaluation: {employee.evaluation}</div>
           <div className={classes.feedbackWrapper}>
             {renderFeedbacks(feedbacks, employee)}
-            { isFeedbackEditing && editEmployeeId === employee._id ? (
-              <form className={classes.form} noValidate onSubmit={onPostFeedback} data-employee-id={employee._id}>
+            {isFeedbackEditing && editEmployeeId === employee._id ? (
+              <form
+                className={classes.form}
+                noValidate
+                onSubmit={onPostFeedback}
+                data-employee-id={employee._id}
+              >
                 <div className={classes.inputFieldContainer}>
-                  <TextField onChange={onChange} value={feedback} id="feedback" label="Feedback" />
+                  <TextField
+                    onChange={onChange}
+                    value={feedback}
+                    id="feedback"
+                    label="Feedback"
+                  />
                 </div>
-                <Button type="submit" variant="contained" className={classes.inputField}>Post Feedback</Button>
-                <Button type="button" variant="contained" onClick={onCancelClick}>Cancel</Button>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  className={classes.inputField}
+                >
+                  Post Feedback
+                </Button>
+                <Button
+                  type="button"
+                  variant="contained"
+                  onClick={onCancelClick}
+                >
+                  Cancel
+                </Button>
               </form>
             ) : (
               renderPostFeedbackButton(currentUser, employee)
-            ) }
+            )}
           </div>
         </div>
-      )
+      );
     });
 
-    return (
-      <div>
-        { employeesList }
-      </div>
-    )
-  }
+    return <div>{employeesList}</div>;
+  };
 
   useEffect(() => {
     loadEmployees();
@@ -166,8 +200,8 @@ const Home = ({ currentUser, employees, feedbacks, loadEmployees, postFeedback, 
         </div>
       </Paper>
     </Grid>
-  )
-}
+  );
+};
 
 Home.propTypes = {
   loadEmployees: func,
@@ -178,7 +212,11 @@ Home.propTypes = {
 const mapStateToProps = ({ auth, feedbacks, employees }) => ({
   currentUser: auth.currentUser,
   employees: employees.employees,
-  feedbacks: feedbacks.feedbacks
+  feedbacks: feedbacks.feedbacks,
 });
 
-export default connect(mapStateToProps, { loadEmployees, postFeedback, loadFeedbacks })(Home);
+export default connect(mapStateToProps, {
+  loadEmployees,
+  postFeedback,
+  loadFeedbacks,
+})(Home);

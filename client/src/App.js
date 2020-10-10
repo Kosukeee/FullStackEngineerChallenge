@@ -2,6 +2,8 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import { Provider } from "react-redux";
+import { makeStyles } from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
 import store from "./store";
 
 import {
@@ -11,9 +13,6 @@ import {
 } from "./actions/authActions";
 import setAuthToken from "./utils/setAuthToken";
 
-import { makeStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-
 import Home from "./components/Home";
 import Admin from "./components/Admin";
 import NavMenu from "./components/NavMenu";
@@ -21,7 +20,7 @@ import Login from "./components/Login";
 import AdminRoute from "./components/AdminRoute";
 import PrivateRoute from "./components/PrivateRoute";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
   },

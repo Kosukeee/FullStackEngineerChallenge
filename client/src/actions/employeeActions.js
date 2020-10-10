@@ -7,6 +7,13 @@ import {
   UPDATE_EMPLOYEE,
 } from "./types";
 
+export const getEmployees = (employees) => {
+  return {
+    type: GET_EMPLOYEES,
+    payload: employees,
+  };
+};
+
 export const loadEmployees = () => (dispatch) => {
   axios
     .get("http://localhost:8080/api/employees")
@@ -16,13 +23,6 @@ export const loadEmployees = () => (dispatch) => {
     .catch((err) => {
       console.error(new Error(err));
     });
-};
-
-export const getEmployees = (employees) => {
-  return {
-    type: GET_EMPLOYEES,
-    payload: employees,
-  };
 };
 
 export const setEmployee = (newEmployee) => {

@@ -1,3 +1,4 @@
+const bcrypt = require("bcryptjs");
 const Employee = require("../models/employee");
 const validateEmployeeInput = require("../validation/employee");
 

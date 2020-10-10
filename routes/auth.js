@@ -5,9 +5,10 @@ const employeeController = require("../controllers/employee");
 
 const router = express.Router();
 
+// Authentication route
 router.post("/login", authController.postLogin);
 
-// add, remove, update, get Empoloyee
+// Empoloyee route
 router.post("/api/admin/employee", employeeController.postEmployee);
 
 router.get("/api/employees", employeeController.getEmployees);
@@ -19,7 +20,7 @@ router.delete(
 
 router.put("/api/admin/employee/:employeeId", employeeController.putEmployee);
 
-// add feedbacks
+// Feedbacks route
 router.post("/api/feedback", feedbackController.postFeedback);
 
 router.get("/api/feedbacks", feedbackController.getFeedbacks);

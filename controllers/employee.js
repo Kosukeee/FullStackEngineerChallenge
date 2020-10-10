@@ -74,8 +74,7 @@ exports.getEmployees = (req, res, next) => {
       return res.json({ employees });
     })
     .catch((err) => {
-      const error = new Error(err);
-      error.statusCode = 500;
+      const error = createaError();
       next(error);
     });
 };

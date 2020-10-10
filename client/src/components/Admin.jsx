@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
-import { func } from 'prop-types';
+import { func, object } from 'prop-types';
 import { loadEmployees, addEmployee, deleteEmployee, updateEmployee } from "../actions/employeeActions";
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from  '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import classnames from "classnames";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,7 +21,12 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center'
   },
   employeeList: {
-    marginBottom: '1rem'
+    marginBottom: '1rem',
+    paddingBottom: '1rem',
+    borderBottom: '1px solid #ccc',
+    width: '60vw',
+    marginLeft: 'auto',
+    marginRight: 'auto'
   },
   inputField: {
     marginRight: '1rem',
@@ -30,12 +36,16 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Admin = ({ employees, addEmployee, deleteEmployee, loadEmployees, updateEmployee }) => {
+const Admin = ({ employees, errors, addEmployee, deleteEmployee, loadEmployees, updateEmployee }) => {
   const [name, setName] = useState('');
   const [evaluation, setEvaluation] = useState('');
   const [nameEdit, setNameEdit] = useState('');
   const [evaluationEdit, setEvaluationEdit] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPw, setConfirmPw] = useState('');
   const [editEmployeeId, setEditEmployeeId] = useState('');
+  const [updatedErrors, setUpdatedErrors] = useState({});
   const classes = useStyles();
 
   const onChange = e => {
@@ -50,6 +60,12 @@ const Admin = ({ employees, addEmployee, deleteEmployee, loadEmployees, updateEm
         return setNameEdit(value);
       case 'evaluationEdit':
         return setEvaluationEdit(value);
+      case 'email':
+        return setEmail(value);
+      case 'password':
+        return setPassword(value);
+      case 'confirmPw':
+        return setConfirmPw(value);
       default:
         return;
     }
@@ -61,10 +77,16 @@ const Admin = ({ employees, addEmployee, deleteEmployee, loadEmployees, updateEm
 
     const employee = {
       name,
+      email,
+      password,
+      confirmPw,
       evaluation,
     };
     addEmployee(employee);
     setName('');
+    setEmail('');
+    setPassword('');
+    setConfirmPw('');
     setEvaluation('');
   };
 
@@ -102,6 +124,16 @@ const Admin = ({ employees, addEmployee, deleteEmployee, loadEmployees, updateEm
     setNameEdit('');
     setEvaluationEdit('');
   }
+
+  const isFirstErrorsUpdate = useRef(true);
+
+  useEffect(() => {
+    if (isFirstErrorsUpdate.current) {
+      isFirstErrorsUpdate.current = false;
+      return;
+    }
+    setUpdatedErrors(errors)
+  }, [errors]);
 
   const showEployeesList = () => {
     const employeesList = employees.map(employee => {
@@ -149,6 +181,9 @@ const Admin = ({ employees, addEmployee, deleteEmployee, loadEmployees, updateEm
         <form className={classes.form} noValidate onSubmit={onSubmit}>
           <div className={classes.inputFieldContainer}>
             <TextField onChange={onChange} value={name} id="name" label="Name" className={classes.inputField} />
+            <TextField onChange={onChange} value={email} error={updatedErrors.email} className={classnames(classes.inputField, { invalid: updatedErrors.email })} id="email" label="Email" />
+            <TextField onChange={onChange} value={password} error={updatedErrors.password} className={classnames(classes.inputField, { invalid: updatedErrors.password })} id="password" label="Password" />
+            <TextField onChange={onChange} value={confirmPw} error={updatedErrors.confirmPw} className={classnames(classes.inputField, { invalid: updatedErrors.confirmPw })} id="confirmPw" label="Confirm Password" />
             <TextField onChange={onChange} value={evaluation} id="evaluation" label="Evaluation" multiline rows={1} />
           </div>
           <Button type="submit" variant="contained">Add Employee</Button>
@@ -167,10 +202,12 @@ Admin.propTypes = {
   deleteEmployee: func,
   loadEmployees: func,
   updateEmployee: func,
+  errors: object.isRequired
 };
 
-const mapStateToProps = ({ employees }) => ({
+const mapStateToProps = ({ employees,errors }) => ({
   employees: employees.employees,
+  errors,
 });
 
 export default connect(mapStateToProps, { addEmployee, deleteEmployee, loadEmployees, updateEmployee })(Admin);

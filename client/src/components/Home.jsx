@@ -22,10 +22,14 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '1rem'
   },
   employeeList: {
-    marginBottom: '1rem'
+    marginBottom: '1rem',
+    paddingBottom: '1rem',
+    borderBottom: '1px solid #ccc',
+    width: '60vw',
+    marginLeft: 'auto',
+    marginRight: 'auto'
   },
   feedbackWrapper: {
-    borderBottom: '1px solid #ccc',
     width: '60vw',
     marginLeft: 'auto',
     marginRight: 'auto',
@@ -108,8 +112,6 @@ const Home = ({ currentUser, employees, feedbacks, loadEmployees, postFeedback, 
   }
 
   const renderPostFeedbackButton = (currentUser, employee) => {
-    // console.log(currentUser);
-    // console.log(employee);
     if (currentUser.id !== employee._id) {
       return (
         <Button type="button" variant="contained" onClick={e => onActivateFeedbackForm(employee._id)} className={classes.feedbackButton}>Post Feedback</Button>

@@ -6,6 +6,14 @@ const EmployeeSchema = new Schema({
     type: String,
     required: true,
   },
+  email: {
+    type: String,
+    required: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
   evaluation: {
     type: String,
     required: true,

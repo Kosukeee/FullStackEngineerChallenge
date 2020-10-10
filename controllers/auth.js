@@ -58,8 +58,10 @@ exports.postLogin = async (req, res, next) => {
 
   const email = req.body.email;
   const password = req.body.password;
+  const isAdmin = email === "admin@test.com";
+  const Model = isAdmin ? User : Employee;
 
-  User.findOne({ email }).then((user) => {
+  Model.findOne({ email }).then((user) => {
     if (!user) {
       return res.status(404).json({ emailnotfound: "Email not found" });
     }
@@ -67,7 +69,7 @@ exports.postLogin = async (req, res, next) => {
     bcrypt.compare(password, user.password).then((isMatch) => {
       if (isMatch) {
         const payload = {
-          id: user.id,
+          id: user._id,
           name: user.name,
         };
 
@@ -102,22 +104,27 @@ const createaError = () => {
 
 exports.postEmployee = (req, res, next) => {
   const { name } = req.body;
+  const { email } = req.body;
+  const { password } = req.body;
   const { evaluation } = req.body;
 
   const employee = new Employee({
     name,
+    email,
+    password,
     evaluation,
   });
 
-  employee
-    .save()
-    .then((result) => {
-      res.status(200).send(result);
-    })
-    .catch((err) => {
-      const error = createaError();
-      return next(error);
+  bcrypt.genSalt(10, (err, salt) => {
+    bcrypt.hash(employee.password, salt, (err, hashedPw) => {
+      if (err) throw err;
+      employee.password = hashedPw;
+      employee
+        .save()
+        .then((user) => res.json(user))
+        .catch((err) => console.log(err));
     });
+  });
 };
 
 exports.deleteEmployee = (req, res, next) => {

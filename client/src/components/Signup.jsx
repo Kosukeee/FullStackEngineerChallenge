@@ -71,7 +71,7 @@ const Signup = ({ signupUser, history, auth, errors }) => {
       return;
     }
     setUpdatedErrors(errors)
-  }, [errors])
+  }, [errors]);
 
   useEffect(() => {
     if (auth.isAuthenticated) {

@@ -58,6 +58,7 @@ const Admin = ({ employees, addEmployee, deleteEmployee, loadEmployees, updateEm
 
   const onSubmit = e => {
     e.preventDefault();
+    if (name.trim() === '' || evaluation.trim() === '') return;
 
     const employee = {
       name,
@@ -90,6 +91,7 @@ const Admin = ({ employees, addEmployee, deleteEmployee, loadEmployees, updateEm
 
   const onUpdate = e => {
     e.preventDefault();
+    if (nameEdit.trim() === '' || evaluationEdit.trim() === '') return;
 
     const employeeId = e.target.dataset.employeeId;
     const updatedEmployee = {

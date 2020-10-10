@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { func } from 'prop-types';
-import { addEmployee, deleteEmployee, updateEmployee } from "../actions/authActions";
-import { loadEmployees } from "../actions/homeActions";
+import { addEmployee, deleteEmployee, updateEmployee, postFeedback } from "../actions/authActions";
+import { loadEmployees, loadFeedbacks } from "../actions/homeActions";
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from  '@material-ui/core/Paper';
@@ -18,107 +18,119 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center'
   },
   form: {
-    textAlign: 'center'
+    textAlign: 'center',
+    marginBottom: '1rem'
   },
   employeeList: {
     marginBottom: '1rem'
-  }
+  },
+  feedbackWrapper: {
+    borderBottom: '1px solid #ccc',
+    width: '60vw',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+  feedbacksContainer: {
+    marginTop: '1rem',
+  },
+  feedbackButton: {
+    marginTop: '1rem',
+    marginBottom: '1rem'
+  },
+  feedback: {
+    marginBottom: '1rem'
+  },
+  feedbackHeadline: {
+    fontWeight: 'bold'
+  },
+  inputFieldContainer: {
+    marginBottom: '1rem',
+  },
+  inputField: {
+    marginRight: '1rem',
+  },
 }));
 
-const Home = ({ employees, addEmployee, deleteEmployee, loadEmployees, updateEmployee }) => {
+const Home = ({ currentUser, employees, feedbacks, addEmployee, deleteEmployee, loadEmployees, updateEmployee, postFeedback, loadFeedbacks }) => {
   const [name, setName] = useState('');
   const [evaluation, setEvaluation] = useState('');
   const [nameEdit, setNameEdit] = useState('');
   const [evaluationEdit, setEvaluationEdit] = useState('');
   const [editEmployeeId, setEditEmployeeId] = useState('');
+  const [feedback, setFeedback] = useState('');
+  const [isFeedbackEditing, setIsFeedbackEditing] = useState(false);
   const classes = useStyles();
 
   const onChange = e => {
     const { value } = e.target;
 
-    switch(e.target.id) {
-      case 'name':
-        return setName(value);
-      case 'evaluation':
-        return setEvaluation(value);
-      case 'nameEdit':
-        return setNameEdit(value);
-      case 'evaluationEdit':
-        return setEvaluationEdit(value);
-      default:
-        return;
-    }
+    setFeedback(value);
   };
 
-  const onSubmit = e => {
+  const onPostFeedback = e => {
     e.preventDefault();
 
-    const employee = {
-      name,
-      evaluation,
+    const targetEmployeeId = e.target.dataset.employeeId;
+    const newFeedback = {
+      targetEmployeeId,
+      comment: feedback,
+      createdEmployeeId: currentUser.id,
+      createdEmployeeName: currentUser.name,
     };
-    addEmployee(employee);
-    setName('');
-    setEvaluation('');
-  };
+    postFeedback(newFeedback);
+    setFeedback('');
+    setIsFeedbackEditing(false);
+  }
 
-  const onDeleteEmployee = e => {
-    const employeeId = e.target.parentNode.dataset.employeeId;
-
-    if (employeeId) {
-      deleteEmployee(employeeId);
-    }
-  };
-
-  const onEditEmployee = (name, evaluation, e) => {
-    const employeeId = e.target.parentNode.dataset.employeeId;
-
-    setNameEdit(name);
-    setEvaluationEdit(evaluation);
+  const onActivateFeedbackForm = (employeeId) => {
+    setIsFeedbackEditing(true);
     setEditEmployeeId(employeeId);
-  };
+  }
 
-  const onEditCancel = () => {
-    setEditEmployeeId('');
-  };
+  const onCancelClick = () => {
+    setIsFeedbackEditing(false);
+    setFeedback('');
+  }
 
-  const onUpdate = e => {
-    e.preventDefault();
+  const renderFeedbacks = (feedbacks, employee) => {
+    const filteredFeedbacks = feedbacks.filter(feedback => feedback.targetEmployeeId === employee._id);
+    const feedbackLists = filteredFeedbacks.map(feedback => {
+      return (
+        <div key={feedback._id} className={classes.feedback}>
+          <div>{feedback.comment}</div>
+          <div>By: {feedback.createdEmployeeName}</div>
+        </div>
+      )
+    })
 
-    const employeeId = e.target.dataset.employeeId;
-    const updatedEmployee = {
-      name: nameEdit,
-      evaluation: evaluationEdit,
-    };
-    updateEmployee(employeeId, updatedEmployee);
-    setEditEmployeeId('');
-    setNameEdit('');
-    setEvaluationEdit('');
+    return (
+      <div className={classes.feedbacksContainer}>
+        <div className={classes.feedbackHeadline}>Feedbacks: </div>
+        {feedbackLists}
+      </div>
+    )
   }
 
   const showEployeesList = () => {
     const employeesList = employees.map(employee => {
       return (
         <div key={employee._id} className={classes.employeeList}>
-          {editEmployeeId === employee._id ? (
-            <>
-              <form className={classes.form} noValidate onSubmit={onUpdate} data-employee-id={employee._id}>
-                <div>
-                  <TextField onChange={onChange} value={nameEdit} id="nameEdit" label="Name" />
-                  <TextField onChange={onChange} value={evaluationEdit} id="evaluationEdit" label="Evaluation" />
+          <div>Name: {employee.name}</div>
+          <div>Evaluation: {employee.evaluation}</div>
+          <div className={classes.feedbackWrapper}>
+            {renderFeedbacks(feedbacks, employee)}
+            { isFeedbackEditing && editEmployeeId === employee._id ? (
+              <form className={classes.form} noValidate onSubmit={onPostFeedback} data-employee-id={employee._id}>
+                <div className={classes.inputFieldContainer}>
+                  <TextField onChange={onChange} value={feedback} id="feedback" label="Feedback" />
                 </div>
-                <Button type="button" variant="contained" onClick={onEditCancel}>Cancel</Button>
-                <Button type="submit" variant="contained">Update</Button>
+                <Button type="submit" variant="contained" className={classes.inputField}>Post Feedback</Button>
+                <Button type="button" variant="contained" onClick={onCancelClick}>Cancel</Button>
               </form>
-            </>
-          ) : (
-            <>
-              <div>Name: {employee.name}</div>
-              <div>Evaluation: {employee.evaluation}</div>
-              <Button type="button" variant="contained" onClick={onDeleteEmployee} data-employee-id={employee._id}>Delete</Button>
-              <Button type="button" variant="contained" onClick={e => onEditEmployee(employee.name, employee.evaluation, e)} data-employee-id={employee._id}>Edit</Button>
-            </>
-          )}
+            ) : (
+              <Button type="button" variant="contained" onClick={e => onActivateFeedbackForm(employee._id)} className={classes.feedbackButton}>Post Feedback</Button>
+            ) }
+          </div>
         </div>
       )
     });
@@ -132,21 +144,15 @@ const Home = ({ employees, addEmployee, deleteEmployee, loadEmployees, updateEmp
 
   useEffect(() => {
     loadEmployees();
-  }, [loadEmployees]);
+    loadFeedbacks();
+  }, [loadEmployees, loadFeedbacks]);
 
   return (
     <Grid item xs={12}>
       <Paper className={classes.paper}>
         <h1>Employee Performance Review</h1>
-        <form className={classes.form} noValidate onSubmit={onSubmit}>
-          <div>
-            <TextField onChange={onChange} value={name} id="name" label="Name" />
-            <TextField onChange={onChange} value={evaluation} id="evaluation" label="Evaluation" />
-          </div>
-          <Button type="submit" variant="contained">Add Employee</Button>
-        </form>
         <div className={classes.form}>
-          <h2>List of Employees</h2>
+          <h2>List of Employees (Please post your feedback!)</h2>
           {showEployeesList()}
         </div>
       </Paper>
@@ -159,10 +165,14 @@ Home.propTypes = {
   deleteEmployee: func,
   loadEmployees: func,
   updateEmployee: func,
+  postFeedback: func,
+  loadFeedbacks: func,
 };
 
-const mapStateToProps = ({ auth }) => ({
-  employees: auth.employees
+const mapStateToProps = ({ auth, feedbacks }) => ({
+  currentUser: auth.currentUser,
+  employees: auth.employees,
+  feedbacks: feedbacks.feedbacks
 });
 
-export default connect(mapStateToProps, { addEmployee, deleteEmployee, loadEmployees, updateEmployee })(Home);
+export default connect(mapStateToProps, { addEmployee, deleteEmployee, loadEmployees, updateEmployee, postFeedback, loadFeedbacks })(Home);

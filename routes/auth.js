@@ -1,22 +1,25 @@
 const express = require("express");
-const cors = require("cors");
 const authController = require("../controllers/auth");
-const homeController = require("../controllers/home");
+const feedbackController = require("../controllers/feedback");
 
 const router = express.Router();
-
-// router.get("/signup", authController.getSignup);
 
 router.post("/signup", authController.postSignup);
 
 router.post("/login", authController.postLogin);
 
-router.post("/api/admin/employee", authController.postAddEmployee);
+// add, remove, update, get Empoloyee
+router.post("/api/admin/employee", authController.postEmployee);
 
-router.get("/api/employees", homeController.getEmployees);
+router.get("/api/employees", authController.getEmployees);
 
 router.delete("/api/admin/employee/:employeeId", authController.deleteEmployee);
 
-router.put("/api/admin/employee/:employeeId", authController.putUpdateEmployee);
+router.put("/api/admin/employee/:employeeId", authController.putEmployee);
+
+// add feedbacks
+router.post("/api/feedback", feedbackController.postFeedback);
+
+router.get("/api/feedbacks", feedbackController.getFeedbacks);
 
 module.exports = router;

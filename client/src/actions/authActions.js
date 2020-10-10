@@ -10,6 +10,7 @@ import {
   UPDATE_EMPLOYEE,
   SET_ADMIN_USER,
   DELETE_ADMIN_USER,
+  ADD_FEEDBACK,
 } from "./types";
 
 export const signupUser = (userData, history) => (dispatch) => {
@@ -148,5 +149,23 @@ export const updateEmployee = (employeeId, updatedEmployeeData) => (
         type: GET_ERRORS,
         payload: err.response.data,
       });
+    });
+};
+
+const addFeedback = (newFeedback) => {
+  return {
+    type: ADD_FEEDBACK,
+    payload: newFeedback,
+  };
+};
+
+export const postFeedback = (newFeedback) => (dispatch) => {
+  axios
+    .post("/api/feedback", newFeedback)
+    .then((res) => {
+      dispatch(addFeedback(res.data));
+    })
+    .catch((err) => {
+      console.log(err);
     });
 };

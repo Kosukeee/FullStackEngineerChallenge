@@ -1,5 +1,6 @@
 import axios from "axios";
-import { GET_EMPLOYEES } from "./types";
+// import { getFeedbacks } from "../../../controllers/feedback";
+import { GET_EMPLOYEES, GET_FEEDBACKS } from "./types";
 
 export const loadEmployees = () => (dispatch) => {
   axios
@@ -17,4 +18,22 @@ export const getEmployees = (employees) => {
     type: GET_EMPLOYEES,
     payload: employees,
   };
+};
+
+export const getFeedbacks = (feedbacks) => {
+  return {
+    type: GET_FEEDBACKS,
+    payload: feedbacks,
+  };
+};
+
+export const loadFeedbacks = () => (dispatch) => {
+  axios
+    .get("http://localhost:8080/api/feedbacks")
+    .then((res) => {
+      dispatch(getFeedbacks(res.data));
+    })
+    .catch((err) => {
+      console.log(new Error(err));
+    });
 };

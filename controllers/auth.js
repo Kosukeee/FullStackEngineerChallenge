@@ -94,13 +94,13 @@ exports.postLogin = async (req, res, next) => {
 };
 
 const createaError = () => {
-  const error = new Error(err);
+  const error = new Error();
   error.statusCode = 500;
 
   return error;
 };
 
-exports.postAddEmployee = (req, res, next) => {
+exports.postEmployee = (req, res, next) => {
   const { name } = req.body;
   const { evaluation } = req.body;
 
@@ -128,12 +128,12 @@ exports.deleteEmployee = (req, res, next) => {
       res.status(200).send(result);
     })
     .catch((err) => {
-      const error = createaError();
+      const error = createaError(err);
       return next(error);
     });
 };
 
-exports.putUpdateEmployee = (req, res, next) => {
+exports.putEmployee = (req, res, next) => {
   const employeeId = req.params.employeeId;
 
   Employee.findByIdAndUpdate(employeeId, req.body, { new: true })
@@ -143,5 +143,17 @@ exports.putUpdateEmployee = (req, res, next) => {
     .catch((err) => {
       const error = createaError();
       return next(error);
+    });
+};
+
+exports.getEmployees = (req, res, next) => {
+  Employee.find()
+    .then((employees) => {
+      return res.json({ employees });
+    })
+    .catch((err) => {
+      const error = new Error(err);
+      error.statusCode = 500;
+      next(error);
     });
 };

@@ -29,6 +29,7 @@ exports.postLogin = async (req, res, next) => {
         const payload = {
           id: user._id,
           name: user.name,
+          isReviewer: user.isReviewer,
         };
 
         jwt.sign(
@@ -71,12 +72,14 @@ exports.postEmployee = (req, res, next) => {
   const { email } = req.body;
   const { password } = req.body;
   const { evaluation } = req.body;
+  const { isReviewer } = req.body;
 
   const employee = new Employee({
     name,
     email,
     password,
     evaluation,
+    isReviewer,
   });
 
   bcrypt.genSalt(10, (err, salt) => {

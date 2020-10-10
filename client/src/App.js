@@ -17,7 +17,6 @@ import Grid from "@material-ui/core/Grid";
 import Home from "./components/Home";
 import Admin from "./components/Admin";
 import NavMenu from "./components/NavMenu";
-import Signup from "./components/Signup";
 import Login from "./components/Login";
 import AdminRoute from "./components/AdminRoute";
 import PrivateRoute from "./components/PrivateRoute";
@@ -61,7 +60,6 @@ function App() {
             <Switch>
               <PrivateRoute exact path="/" component={Home} />
               <AdminRoute exact path="/admin" component={Admin} />
-              <Route path="/signup" component={Signup} />
               <Route path="/login" component={Login} />
             </Switch>
           </Grid>

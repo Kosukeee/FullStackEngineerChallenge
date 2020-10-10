@@ -112,7 +112,7 @@ const Home = ({ currentUser, employees, feedbacks, loadEmployees, postFeedback, 
   }
 
   const renderPostFeedbackButton = (currentUser, employee) => {
-    if (currentUser.id !== employee._id) {
+    if (currentUser.isReviewer && currentUser.id !== employee._id) {
       return (
         <Button type="button" variant="contained" onClick={e => onActivateFeedbackForm(employee._id)} className={classes.feedbackButton}>Post Feedback</Button>
       )

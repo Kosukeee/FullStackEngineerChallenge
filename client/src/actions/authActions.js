@@ -9,19 +9,6 @@ import {
   DELETE_ADMIN_USER,
 } from "./types";
 
-export const signupUser = (userData, history) => (dispatch) => {
-  axios
-    .post("http://localhost:8080/signup", userData)
-    .then((res) => history.push("/login"))
-    .catch((err) => {
-      console.log(err);
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data,
-      });
-    });
-};
-
 export const loginUser = (userData) => (dispatch) => {
   axios
     .post("/login", userData)

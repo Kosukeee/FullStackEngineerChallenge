@@ -7,6 +7,9 @@ import Grid from '@material-ui/core/Grid';
 import Paper from  '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import classnames from "classnames";
 
 const useStyles = makeStyles((theme) => ({
@@ -33,6 +36,9 @@ const useStyles = makeStyles((theme) => ({
   },
   inputFieldContainer: {
     marginBottom: '1rem',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   }
 }));
 
@@ -45,6 +51,8 @@ const Admin = ({ employees, errors, addEmployee, deleteEmployee, loadEmployees, 
   const [password, setPassword] = useState('');
   const [confirmPw, setConfirmPw] = useState('');
   const [editEmployeeId, setEditEmployeeId] = useState('');
+  const [isReviewer, setIsReviewer] = useState(false);
+  const [isReviewerEdit, setIsReviewerEdit] = useState(false);
   const [updatedErrors, setUpdatedErrors] = useState([{}]);
   const classes = useStyles();
 
@@ -81,6 +89,7 @@ const Admin = ({ employees, errors, addEmployee, deleteEmployee, loadEmployees, 
       password,
       confirmPw,
       evaluation,
+      isReviewer,
     };
     addEmployee(employee);
     setName('');
@@ -88,6 +97,7 @@ const Admin = ({ employees, errors, addEmployee, deleteEmployee, loadEmployees, 
     setPassword('');
     setConfirmPw('');
     setEvaluation('');
+    setIsReviewer(false);
     setUpdatedErrors([{}]);
   };
 
@@ -99,16 +109,20 @@ const Admin = ({ employees, errors, addEmployee, deleteEmployee, loadEmployees, 
     }
   };
 
-  const onEditEmployee = (name, evaluation, e) => {
+  const onEditEmployee = (name, evaluation, isReviewer, e) => {
     const employeeId = e.target.parentNode.dataset.employeeId;
 
     setNameEdit(name);
     setEvaluationEdit(evaluation);
+    setIsReviewerEdit(isReviewer)
     setEditEmployeeId(employeeId);
   };
 
   const onEditCancel = () => {
     setEditEmployeeId('');
+    setNameEdit('');
+    setEvaluationEdit('');
+    setIsReviewerEdit(false);
   };
 
   const onUpdate = e => {
@@ -119,11 +133,13 @@ const Admin = ({ employees, errors, addEmployee, deleteEmployee, loadEmployees, 
     const updatedEmployee = {
       name: nameEdit,
       evaluation: evaluationEdit,
+      isReviewer: isReviewerEdit
     };
     updateEmployee(employeeId, updatedEmployee);
     setEditEmployeeId('');
     setNameEdit('');
     setEvaluationEdit('');
+    setIsReviewerEdit(false);
   }
 
   const showEployeesList = () => {
@@ -136,6 +152,12 @@ const Admin = ({ employees, errors, addEmployee, deleteEmployee, loadEmployees, 
                 <div className={classes.inputFieldContainer}>
                   <TextField onChange={onChange} value={nameEdit} id="nameEdit" label="Name" className={classes.inputField} />
                   <TextField onChange={onChange} value={evaluationEdit} id="evaluationEdit" label="Evaluation" multiline rows={1} />
+                  <FormControlLabel
+                    control={
+                      <Checkbox onChange={handleReviewerChange} checked={isReviewerEdit} id="isReviewerEdit" color="primary" name="isReviewerEdit" />
+                    }
+                    label="Reviewer"
+                  />
                 </div>
                 <Button type="button" variant="contained" onClick={onEditCancel} className={classes.inputField}>Cancel</Button>
                 <Button type="submit" variant="contained">Update</Button>
@@ -145,8 +167,9 @@ const Admin = ({ employees, errors, addEmployee, deleteEmployee, loadEmployees, 
             <>
               <div>Name: {employee.name}</div>
               <div>Evaluation: {employee.evaluation}</div>
+              <div>Reviewer: {employee.isReviewer === true ? 'true' : 'false'}</div>
               <Button type="button" variant="contained" onClick={onDeleteEmployee} data-employee-id={employee._id} className={classes.inputField}>Delete</Button>
-              <Button type="button" variant="contained" onClick={e => onEditEmployee(employee.name, employee.evaluation, e)} data-employee-id={employee._id}>Edit</Button>
+              <Button type="button" variant="contained" onClick={e => onEditEmployee(employee.name, employee.evaluation, employee.isReviewer, e)} data-employee-id={employee._id}>Edit</Button>
             </>
           )}
         </div>
@@ -158,6 +181,10 @@ const Admin = ({ employees, errors, addEmployee, deleteEmployee, loadEmployees, 
         { employeesList }
       </div>
     )
+  }
+
+  const handleReviewerChange = e => {
+    e.target.id === 'isReviewer' ? setIsReviewer(!isReviewer) : setIsReviewerEdit(!isReviewerEdit);
   }
 
   const isFirstErrorsUpdate = useRef(true);
@@ -186,6 +213,12 @@ const Admin = ({ employees, errors, addEmployee, deleteEmployee, loadEmployees, 
             <TextField onChange={onChange} value={password} error={!!updatedErrors[0].password} className={classnames(classes.inputField, { invalid: !!updatedErrors[0].password })} id="password" label="Password" />
             <TextField onChange={onChange} value={confirmPw} error={!!updatedErrors[0].confirmPw} className={classnames(classes.inputField, { invalid: !!updatedErrors[0].confirmPw })} id="confirmPw" label="Confirm Password" />
             <TextField onChange={onChange} value={evaluation} id="evaluation" label="Evaluation" multiline rows={1} />
+            <FormControlLabel
+              control={
+                <Checkbox onChange={handleReviewerChange} checked={isReviewer} id="isReviewer" color="primary" name="isReviewer" />
+              }
+              label="Reviewer"
+            />
           </div>
           <Button type="submit" variant="contained">Add Employee</Button>
         </form>

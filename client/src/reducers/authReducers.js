@@ -12,6 +12,7 @@ const initialState = {
   isAdmin: false,
   currentUser: {},
   loading: false,
+  isReviewer: false,
 };
 
 export default function (state = initialState, action) {

@@ -23,6 +23,10 @@ const useStyles = makeStyles((theme) => ({
   userName: {
     marginLeft: '1rem',
     color: '#666',
+  },
+  reviewer: {
+    marginLeft: '.5rem',
+    color: '#666'
   }
 }));
 
@@ -65,6 +69,9 @@ const NavMenu = ({ auth, logoutUser, deleteAdminUser, history }) => {
       {showAuthButton(auth, classes, history, logoutUser, deleteAdminUser)}
       { '|' }
       <span className={classes.userName}>{auth.currentUser.name}</span>
+      { auth.currentUser.isReviewer && (
+        <span className={classes.reviewer}>(Reviewer)</span>
+      ) }
     </nav>
   )
 };

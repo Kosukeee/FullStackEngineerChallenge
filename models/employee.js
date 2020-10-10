@@ -18,6 +18,10 @@ const EmployeeSchema = new Schema({
     type: String,
     required: true,
   },
+  isReviewer: {
+    type: Boolean,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("Employee", EmployeeSchema);

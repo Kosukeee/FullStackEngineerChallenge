@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
-import { func, object } from 'prop-types';
+import { func, object, arrayOf } from 'prop-types';
 import { loadEmployees, addEmployee, deleteEmployee, updateEmployee } from "../actions/employeeActions";
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -45,7 +45,7 @@ const Admin = ({ employees, errors, addEmployee, deleteEmployee, loadEmployees, 
   const [password, setPassword] = useState('');
   const [confirmPw, setConfirmPw] = useState('');
   const [editEmployeeId, setEditEmployeeId] = useState('');
-  const [updatedErrors, setUpdatedErrors] = useState({});
+  const [updatedErrors, setUpdatedErrors] = useState([{}]);
   const classes = useStyles();
 
   const onChange = e => {
@@ -88,6 +88,7 @@ const Admin = ({ employees, errors, addEmployee, deleteEmployee, loadEmployees, 
     setPassword('');
     setConfirmPw('');
     setEvaluation('');
+    setUpdatedErrors([{}]);
   };
 
   const onDeleteEmployee = e => {
@@ -125,16 +126,6 @@ const Admin = ({ employees, errors, addEmployee, deleteEmployee, loadEmployees, 
     setEvaluationEdit('');
   }
 
-  const isFirstErrorsUpdate = useRef(true);
-
-  useEffect(() => {
-    if (isFirstErrorsUpdate.current) {
-      isFirstErrorsUpdate.current = false;
-      return;
-    }
-    setUpdatedErrors(errors)
-  }, [errors]);
-
   const showEployeesList = () => {
     const employeesList = employees.map(employee => {
       return (
@@ -169,6 +160,16 @@ const Admin = ({ employees, errors, addEmployee, deleteEmployee, loadEmployees, 
     )
   }
 
+  const isFirstErrorsUpdate = useRef(true);
+
+  useEffect(() => {
+    if (isFirstErrorsUpdate.current) {
+      isFirstErrorsUpdate.current = false;
+      return;
+    }
+    setUpdatedErrors(errors)
+  }, [errors]);
+
   useEffect(() => {
     loadEmployees();
   }, [loadEmployees]);
@@ -181,9 +182,9 @@ const Admin = ({ employees, errors, addEmployee, deleteEmployee, loadEmployees, 
         <form className={classes.form} noValidate onSubmit={onSubmit}>
           <div className={classes.inputFieldContainer}>
             <TextField onChange={onChange} value={name} id="name" label="Name" className={classes.inputField} />
-            <TextField onChange={onChange} value={email} error={updatedErrors.email} className={classnames(classes.inputField, { invalid: updatedErrors.email })} id="email" label="Email" />
-            <TextField onChange={onChange} value={password} error={updatedErrors.password} className={classnames(classes.inputField, { invalid: updatedErrors.password })} id="password" label="Password" />
-            <TextField onChange={onChange} value={confirmPw} error={updatedErrors.confirmPw} className={classnames(classes.inputField, { invalid: updatedErrors.confirmPw })} id="confirmPw" label="Confirm Password" />
+            <TextField onChange={onChange} value={email} error={!!updatedErrors[0].email} className={classnames(classes.inputField, { invalid: !!updatedErrors[0].email })} id="email" label="Email" />
+            <TextField onChange={onChange} value={password} error={!!updatedErrors[0].password} className={classnames(classes.inputField, { invalid: !!updatedErrors[0].password })} id="password" label="Password" />
+            <TextField onChange={onChange} value={confirmPw} error={!!updatedErrors[0].confirmPw} className={classnames(classes.inputField, { invalid: !!updatedErrors[0].confirmPw })} id="confirmPw" label="Confirm Password" />
             <TextField onChange={onChange} value={evaluation} id="evaluation" label="Evaluation" multiline rows={1} />
           </div>
           <Button type="submit" variant="contained">Add Employee</Button>
@@ -202,12 +203,12 @@ Admin.propTypes = {
   deleteEmployee: func,
   loadEmployees: func,
   updateEmployee: func,
-  errors: object.isRequired
+  errors: arrayOf(object)
 };
 
-const mapStateToProps = ({ employees,errors }) => ({
+const mapStateToProps = ({ employees, errors }) => ({
   employees: employees.employees,
-  errors,
+  errors: errors.errors,
 });
 
 export default connect(mapStateToProps, { addEmployee, deleteEmployee, loadEmployees, updateEmployee })(Admin);

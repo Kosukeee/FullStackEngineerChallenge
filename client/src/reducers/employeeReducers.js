@@ -5,8 +5,6 @@ import {
   UPDATE_EMPLOYEE,
 } from "../actions/types";
 
-const isEmpty = require("is-empty");
-
 const initialState = {
   employees: [],
 };

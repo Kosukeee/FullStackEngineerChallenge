@@ -2,52 +2,10 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const keys = require("../config/keys");
 
-const validateSignupInput = require("../validation/signup");
 const validateLoginInput = require("../validation/login");
-
+const validateEmployeeInput = require("../validation/employee");
 const User = require("../models/user");
 const Employee = require("../models/employee");
-
-exports.getSignup = (req, res, next) => {
-  let message = req.flash("error");
-
-  res.render("/");
-};
-
-exports.postSignup = async (req, res, next) => {
-  const { email } = req.body;
-  const { name } = req.body;
-  const { password } = req.body;
-
-  const { errors, isValid } = validateSignupInput(req.body);
-
-  if (!isValid) {
-    return res.status(400).json(errors);
-  }
-
-  User.findOne({ email: req.body.email }).then((user) => {
-    if (user) {
-      return res.status(400).json({ email: "Email already exists" });
-    }
-
-    const newUser = new User({
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
-    });
-
-    bcrypt.genSalt(10, (err, salt) => {
-      bcrypt.hash(newUser.password, salt, (err, hashedPw) => {
-        if (err) throw err;
-        newUser.password = hashedPw;
-        newUser
-          .save()
-          .then((user) => res.json(user))
-          .catch((err) => console.log(err));
-      });
-    });
-  });
-};
 
 exports.postLogin = async (req, res, next) => {
   const { errors, isValid } = validateLoginInput(req.body);
@@ -103,6 +61,12 @@ const createaError = () => {
 };
 
 exports.postEmployee = (req, res, next) => {
+  const { errors, isValid } = validateEmployeeInput(req.body);
+
+  if (!isValid) {
+    return res.status(400).json(errors);
+  }
+
   const { name } = req.body;
   const { email } = req.body;
   const { password } = req.body;

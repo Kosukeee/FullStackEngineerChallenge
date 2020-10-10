@@ -50,7 +50,6 @@ const showAuthButton = (auth, classes, history, logoutUser, deleteAdminUser) => 
   } else {
     return (
       <>
-        <Link to="/signup"className={classes.button}>Sign Up</Link>
         <Link to="/login"className={classes.button}>Log In</Link>
       </>
     )

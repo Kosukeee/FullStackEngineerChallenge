@@ -101,11 +101,11 @@ Signup.propTypes = {
   errors: object.isRequired
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = ({ auth, errors }) => {
   return (
     {
-      auth: state.auth,
-      errors: state.errors
+      auth,
+      errors
     }
   )
 };

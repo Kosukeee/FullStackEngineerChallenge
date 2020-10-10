@@ -5,12 +5,8 @@ import {
   GET_ERRORS,
   SET_CURRENT_USER,
   USER_LOADING,
-  ADD_EMPLOYEE,
-  DELETE_EMPLOYEE,
-  UPDATE_EMPLOYEE,
   SET_ADMIN_USER,
   DELETE_ADMIN_USER,
-  ADD_FEEDBACK,
 } from "./types";
 
 export const signupUser = (userData, history) => (dispatch) => {
@@ -81,91 +77,4 @@ export const logoutUser = (history) => (dispatch) => {
   dispatch(deleteAdminUser());
   dispatch(setCurrentUser({}));
   history.push("/login");
-};
-
-export const setEmployee = (newEmployee) => {
-  return {
-    type: ADD_EMPLOYEE,
-    payload: newEmployee,
-  };
-};
-
-export const addEmployee = (employeeData) => (dispatch) => {
-  axios
-    .post("http://localhost:8080/api/admin/employee", employeeData)
-    .then((res) => {
-      dispatch(setEmployee(res.data));
-    })
-    .catch((err) => {
-      console.log(err);
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data,
-      });
-    });
-};
-
-export const setDeleteEmployee = (employeeId) => {
-  return {
-    type: DELETE_EMPLOYEE,
-    payload: employeeId,
-  };
-};
-
-export const deleteEmployee = (employeeId) => (dispatch) => {
-  axios
-    .delete(`http://localhost:8080/api/admin/employee/${employeeId}`)
-    .then((res) => {
-      dispatch(setDeleteEmployee(res.data._id));
-    })
-    .catch((err) => {
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data,
-      });
-    });
-};
-
-export const setUpdateEmployee = (employeeData) => {
-  return {
-    type: UPDATE_EMPLOYEE,
-    payload: employeeData,
-  };
-};
-
-export const updateEmployee = (employeeId, updatedEmployeeData) => (
-  dispatch
-) => {
-  axios
-    .put(
-      `http://localhost:8080/api/admin/employee/${employeeId}`,
-      updatedEmployeeData
-    )
-    .then((res) => {
-      dispatch(setUpdateEmployee(res.data));
-    })
-    .catch((err) => {
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data,
-      });
-    });
-};
-
-const addFeedback = (newFeedback) => {
-  return {
-    type: ADD_FEEDBACK,
-    payload: newFeedback,
-  };
-};
-
-export const postFeedback = (newFeedback) => (dispatch) => {
-  axios
-    .post("/api/feedback", newFeedback)
-    .then((res) => {
-      dispatch(addFeedback(res.data));
-    })
-    .catch((err) => {
-      console.log(err);
-    });
 };

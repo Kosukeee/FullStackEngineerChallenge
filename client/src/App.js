@@ -19,6 +19,7 @@ import Admin from "./components/Admin";
 import NavMenu from "./components/NavMenu";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
+import AdminRoute from "./components/AdminRoute";
 import PrivateRoute from "./components/PrivateRoute";
 
 const useStyles = makeStyles((theme) => ({
@@ -58,8 +59,8 @@ function App() {
           <Grid container>
             <NavMenu />
             <Switch>
-              <Route exact path="/" component={Home} />
-              <PrivateRoute exact path="/admin" component={Admin} />
+              <PrivateRoute exact path="/" component={Home} />
+              <AdminRoute exact path="/admin" component={Admin} />
               <Route path="/signup" component={Signup} />
               <Route path="/login" component={Login} />
             </Switch>

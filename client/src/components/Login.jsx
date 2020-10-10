@@ -87,9 +87,9 @@ Login.propTypes = {
   errors: object.isRequired
 };
 
-const mapStateToProps = state => ({
-  auth: state.auth,
-  errors: state.errors
+const mapStateToProps = ({ auth, errors }) => ({
+  auth,
+  errors
 });
 
 export default connect(mapStateToProps, { loginUser })(Login);

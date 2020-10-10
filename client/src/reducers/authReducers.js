@@ -1,10 +1,6 @@
 import {
   SET_CURRENT_USER,
   USER_LOADING,
-  ADD_EMPLOYEE,
-  GET_EMPLOYEES,
-  DELETE_EMPLOYEE,
-  UPDATE_EMPLOYEE,
   SET_ADMIN_USER,
   DELETE_ADMIN_USER,
 } from "../actions/types";
@@ -16,7 +12,6 @@ const initialState = {
   isAdmin: false,
   currentUser: {},
   loading: false,
-  employees: [],
 };
 
 export default function (state = initialState, action) {
@@ -31,34 +26,6 @@ export default function (state = initialState, action) {
       return {
         ...state,
         loading: true,
-      };
-    case ADD_EMPLOYEE:
-      return {
-        ...state,
-        employees: [...state.employees, action.payload],
-      };
-    case GET_EMPLOYEES:
-      return {
-        ...state,
-        employees: action.payload.data.employees,
-      };
-    case DELETE_EMPLOYEE:
-      return {
-        ...state,
-        employees: state.employees.filter(
-          (employee) => employee._id !== action.payload
-        ),
-      };
-    case UPDATE_EMPLOYEE:
-      const index = state.employees.findIndex(
-        (employee) => employee._id === action.payload._id
-      );
-      const newArray = [...state.employees];
-      newArray[index] = action.payload;
-
-      return {
-        ...state,
-        employees: newArray,
       };
     case SET_ADMIN_USER:
       return {

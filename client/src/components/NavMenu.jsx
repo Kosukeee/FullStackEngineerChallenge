@@ -75,8 +75,8 @@ NavMenu.propTypes = {
   deleteAdminUser: func.isRequired,
 }
 
-const mapStateToProps = state => ({
-  auth: state.auth
+const mapStateToProps = ({ auth }) => ({
+  auth
 });
 
 export default withRouter(connect(mapStateToProps, { logoutUser, deleteAdminUser })(NavMenu));

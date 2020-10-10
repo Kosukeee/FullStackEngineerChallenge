@@ -15,7 +15,7 @@ const store = createStore(
 );
 
 store.subscribe(() => {
-  console.log(store.getState().auth.employees);
+  console.log(store.getState().employees.employees);
 });
 
 export default store;

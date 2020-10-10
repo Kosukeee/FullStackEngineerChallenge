@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { func } from 'prop-types';
-import { addEmployee, deleteEmployee, updateEmployee } from "../actions/authActions";
-import { loadEmployees } from "../actions/homeActions";
+import { loadEmployees, addEmployee, deleteEmployee, updateEmployee } from "../actions/employeeActions";
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from  '@material-ui/core/Paper';
@@ -170,8 +169,8 @@ Admin.propTypes = {
   updateEmployee: func,
 };
 
-const mapStateToProps = (state) => ({
-  employees: state.auth.employees,
+const mapStateToProps = ({ employees }) => ({
+  employees: employees.employees,
 });
 
 export default connect(mapStateToProps, { addEmployee, deleteEmployee, loadEmployees, updateEmployee })(Admin);

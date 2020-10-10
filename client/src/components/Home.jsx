@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { func } from 'prop-types';
-import { addEmployee, deleteEmployee, updateEmployee, postFeedback } from "../actions/authActions";
-import { loadEmployees, loadFeedbacks } from "../actions/homeActions";
+import { loadEmployees } from '../actions/employeeActions';
+import { loadFeedbacks, postFeedback } from "../actions/feedbackActions";
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from  '@material-ui/core/Paper';
@@ -51,11 +51,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Home = ({ currentUser, employees, feedbacks, addEmployee, deleteEmployee, loadEmployees, updateEmployee, postFeedback, loadFeedbacks }) => {
-  const [name, setName] = useState('');
-  const [evaluation, setEvaluation] = useState('');
-  const [nameEdit, setNameEdit] = useState('');
-  const [evaluationEdit, setEvaluationEdit] = useState('');
+const Home = ({ currentUser, employees, feedbacks, loadEmployees, postFeedback, loadFeedbacks }) => {
   const [editEmployeeId, setEditEmployeeId] = useState('');
   const [feedback, setFeedback] = useState('');
   const [isFeedbackEditing, setIsFeedbackEditing] = useState(false);
@@ -101,7 +97,7 @@ const Home = ({ currentUser, employees, feedbacks, addEmployee, deleteEmployee, 
           <div>By: {feedback.createdEmployeeName}</div>
         </div>
       )
-    })
+    });
 
     return (
       <div className={classes.feedbacksContainer}>
@@ -109,6 +105,17 @@ const Home = ({ currentUser, employees, feedbacks, addEmployee, deleteEmployee, 
         {feedbackLists}
       </div>
     )
+  }
+
+  const renderPostFeedbackButton = (currentUser, employee) => {
+    // console.log(currentUser);
+    // console.log(employee);
+    if (currentUser.id !== employee._id) {
+      return (
+        <Button type="button" variant="contained" onClick={e => onActivateFeedbackForm(employee._id)} className={classes.feedbackButton}>Post Feedback</Button>
+      )
+    }
+    return;
   }
 
   const showEployeesList = () => {
@@ -128,7 +135,7 @@ const Home = ({ currentUser, employees, feedbacks, addEmployee, deleteEmployee, 
                 <Button type="button" variant="contained" onClick={onCancelClick}>Cancel</Button>
               </form>
             ) : (
-              <Button type="button" variant="contained" onClick={e => onActivateFeedbackForm(employee._id)} className={classes.feedbackButton}>Post Feedback</Button>
+              renderPostFeedbackButton(currentUser, employee)
             ) }
           </div>
         </div>
@@ -161,18 +168,15 @@ const Home = ({ currentUser, employees, feedbacks, addEmployee, deleteEmployee, 
 }
 
 Home.propTypes = {
-  addEmployee: func,
-  deleteEmployee: func,
   loadEmployees: func,
-  updateEmployee: func,
   postFeedback: func,
   loadFeedbacks: func,
 };
 
-const mapStateToProps = ({ auth, feedbacks }) => ({
+const mapStateToProps = ({ auth, feedbacks, employees }) => ({
   currentUser: auth.currentUser,
-  employees: auth.employees,
+  employees: employees.employees,
   feedbacks: feedbacks.feedbacks
 });
 
-export default connect(mapStateToProps, { addEmployee, deleteEmployee, loadEmployees, updateEmployee, postFeedback, loadFeedbacks })(Home);
+export default connect(mapStateToProps, { loadEmployees, postFeedback, loadFeedbacks })(Home);

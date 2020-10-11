@@ -44,6 +44,9 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
   },
+  headline: {
+    fontWeight: "bold",
+  },
 }));
 
 const Admin = ({
@@ -209,10 +212,16 @@ const Admin = ({
             </>
           ) : (
             <>
-              <div>Name: {employee.name}</div>
-              <div>Evaluation: {employee.evaluation}</div>
               <div>
-                Reviewer: {employee.isReviewer === true ? "true" : "false"}
+                <span className={classes.headline}>Name:</span> {employee.name}
+              </div>
+              <div>
+                <span className={classes.headline}>Evaluation:</span>{" "}
+                {employee.evaluation}
+              </div>
+              <div>
+                <span className={classes.headline}>Reviewer:</span>{" "}
+                {employee.isReviewer === true ? "true" : "false"}
               </div>
               <Button
                 type="button"
@@ -346,11 +355,12 @@ const Admin = ({
 };
 
 Admin.propTypes = {
-  addEmployee: func,
-  deleteEmployee: func,
-  loadEmployees: func,
-  updateEmployee: func,
-  errors: arrayOf(object),
+  employees: arrayOf(object).isRequired,
+  addEmployee: func.isRequired,
+  deleteEmployee: func.isRequired,
+  loadEmployees: func.isRequired,
+  updateEmployee: func.isRequired,
+  errors: arrayOf(object).isRequired,
 };
 
 const mapStateToProps = ({ employees, errors }) => ({

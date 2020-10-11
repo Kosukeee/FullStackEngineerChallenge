@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import { object } from "prop-types";
+import { object, shape, bool } from "prop-types";
 
 const AdminRoute = ({ component: Component, auth, ...rest }) => (
   <Route
@@ -13,7 +13,13 @@ const AdminRoute = ({ component: Component, auth, ...rest }) => (
 );
 
 AdminRoute.propTypes = {
-  auth: object.isRequired,
+  auth: shape({
+    currentUser: object,
+    isAdmin: bool,
+    isAuthenticated: bool,
+    isReviewer: bool,
+    loading: bool,
+  }).isRequired,
 };
 
 const mapStateToProps = (state) => ({

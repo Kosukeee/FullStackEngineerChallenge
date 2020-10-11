@@ -26,6 +26,8 @@ _Partial solutions are acceptable._ It is not necessary to submit a complete sol
 - mail: admin@test.com
 - password: testtest
 
+You can employee from 'Admin Page'.
+
 ### Log in as employee
 
 - mail: test_1@test.com

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { func } from "prop-types";
+import { func, arrayOf, object } from "prop-types";
 import { loadEmployees } from "../actions/employeeActions";
 import { loadFeedbacks, postFeedback } from "../actions/feedbackActions";
 import { makeStyles } from "@material-ui/core/styles";
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   feedback: {
     marginBottom: "1rem",
   },
-  feedbackHeadline: {
+  headline: {
     fontWeight: "bold",
   },
   inputFieldContainer: {
@@ -114,7 +114,7 @@ const Home = ({
 
     return (
       <div className={classes.feedbacksContainer}>
-        <div className={classes.feedbackHeadline}>Feedbacks: </div>
+        <div className={classes.headline}>Feedbacks: </div>
         {feedbackLists}
       </div>
     );
@@ -140,8 +140,13 @@ const Home = ({
     const employeesList = employees.map((employee) => {
       return (
         <div key={employee._id} className={classes.employeeList}>
-          <div>Name: {employee.name}</div>
-          <div>Evaluation: {employee.evaluation}</div>
+          <div>
+            <span className={classes.headline}>Name:</span> {employee.name}
+          </div>
+          <div>
+            <span className={classes.headline}>Evaluation:</span>{" "}
+            {employee.evaluation}
+          </div>
           <div className={classes.feedbackWrapper}>
             {renderFeedbacks(feedbacks, employee)}
             {isFeedbackEditing && editEmployeeId === employee._id ? (
@@ -204,9 +209,12 @@ const Home = ({
 };
 
 Home.propTypes = {
-  loadEmployees: func,
-  postFeedback: func,
-  loadFeedbacks: func,
+  currentUser: object.isRequired,
+  employees: arrayOf(object).isRequired,
+  feedbacks: arrayOf(object).isRequired,
+  loadEmployees: func.isRequired,
+  postFeedback: func.isRequired,
+  loadFeedbacks: func.isRequired,
 };
 
 const mapStateToProps = ({ auth, feedbacks, employees }) => ({

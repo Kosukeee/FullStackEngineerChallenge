@@ -1,5 +1,5 @@
 import React from "react";
-import { func } from "prop-types";
+import { func, object, shape, bool } from "prop-types";
 import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
 import { logoutUser, deleteAdminUser } from "../actions/authActions";
@@ -30,52 +30,52 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const showAuthButton = (
-  auth,
-  classes,
-  history,
-  logoutUser,
-  deleteAdminUser
-) => {
-  const onLogoutClick = (e) => {
-    e.preventDefault();
-    logoutUser(history);
-    deleteAdminUser();
-    localStorage.setItem("isAdmin", false);
-  };
+const NavMenu = ({ auth, logoutUser, deleteAdminUser, history }) => {
+  const classes = useStyles();
 
-  const renderAdminButton = () => {
-    if (auth.isAdmin) {
+  const showAuthButton = (
+    auth,
+    classes,
+    history,
+    logoutUser,
+    deleteAdminUser
+  ) => {
+    const onLogoutClick = (e) => {
+      e.preventDefault();
+      logoutUser(history);
+      deleteAdminUser();
+      localStorage.setItem("isAdmin", false);
+    };
+
+    const renderAdminButton = () => {
+      if (auth.isAdmin) {
+        return (
+          <Link to="/admin" className={classes.button}>
+            Admin Page
+          </Link>
+        );
+      }
+    };
+
+    if (auth.isAuthenticated) {
       return (
-        <Link to="/admin" className={classes.button}>
-          Admin Page
-        </Link>
+        <>
+          <Link to="/" onClick={onLogoutClick} className={classes.button}>
+            Logout
+          </Link>
+          {renderAdminButton()}
+        </>
+      );
+    } else {
+      return (
+        <>
+          <Link to="/login" className={classes.button}>
+            Log In
+          </Link>
+        </>
       );
     }
   };
-
-  if (auth.isAuthenticated) {
-    return (
-      <>
-        <Link to="/" onClick={onLogoutClick} className={classes.button}>
-          Logout
-        </Link>
-        {renderAdminButton()}
-      </>
-    );
-  } else {
-    return (
-      <>
-        <Link to="/login" className={classes.button}>
-          Log In
-        </Link>
-      </>
-    );
-  }
-};
-
-const NavMenu = ({ auth, logoutUser, deleteAdminUser, history }) => {
-  const classes = useStyles();
 
   return (
     <nav className={classes.nav}>
@@ -95,6 +95,14 @@ const NavMenu = ({ auth, logoutUser, deleteAdminUser, history }) => {
 NavMenu.propTypes = {
   logoutUser: func.isRequired,
   deleteAdminUser: func.isRequired,
+  history: object.isRequired,
+  auth: shape({
+    currentUser: object,
+    isAdmin: bool,
+    isAuthenticated: bool,
+    isReviewer: bool,
+    loading: bool,
+  }).isRequired,
 };
 
 const mapStateToProps = ({ auth }) => ({

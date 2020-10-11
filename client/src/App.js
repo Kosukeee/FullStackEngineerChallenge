@@ -19,6 +19,7 @@ import NavMenu from "./components/NavMenu";
 import Login from "./components/Login";
 import AdminRoute from "./components/AdminRoute";
 import PrivateRoute from "./components/PrivateRoute";
+import NotFound from "./components/NotFound";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -60,6 +61,7 @@ function App() {
               <PrivateRoute exact path="/" component={Home} />
               <AdminRoute exact path="/admin" component={Admin} />
               <Route path="/login" component={Login} />
+              <Route path="/*" component={NotFound} />
             </Switch>
           </Grid>
         </div>

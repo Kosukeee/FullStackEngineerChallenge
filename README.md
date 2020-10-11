@@ -8,6 +8,10 @@ Design a web application that allows employees to submit feedback toward each ot
 
 _Partial solutions are acceptable._ It is not necessary to submit a complete solution that implements every requirement.
 
+### Settings
+
+Under config/keys.js, please replace 'YOUR_MONGOURI' to your MongoDB URI to make it work.
+
 ### Admin view
 
 - Add/remove/update/view employees
